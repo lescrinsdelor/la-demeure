@@ -1,0 +1,1046 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>La Demeure, 2017 – 2026</title>
+<meta name="robots" content="noindex, nofollow">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Figtree:wght@500;600&display=swap">
+<style>
+/* Même habillage que le diaporama de la longère : fond sombre fixe, photos et dates seulement.
+   Trois classements : 1. mêmes angles de vue (une planche par pièce, une rangée par point de vue),
+   2. chronologie complète (avant, incendie, travaux, après), 3. toutes les photos pièce par pièce.
+   Les plans ouvrent la page : avant et après côte à côte, puis superposés. */
+:root{
+  --bg:#12100d;
+  --ink:#f1ebe0;
+  --muted:#a59c8c;
+  --gold:#d2a957;
+  --panel:rgba(18,16,13,.72);
+  --line:rgba(241,235,224,.16);
+  --avant:#b7c3d6;
+  --incendie:#ee7a4f;
+  --apres:#9fcf8f;
+  --display:"DM Serif Display", Georgia, serif;
+  --body:"Figtree", system-ui, -apple-system, "Segoe UI", sans-serif;
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+html,body{height:100%;margin:0;background:var(--bg);color:var(--ink);font-family:var(--body)}
+button,select{font:inherit;color:inherit}
+:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
+
+/* ---------- accueil ---------- */
+#home{height:100%;overflow-y:auto}
+.wrap{max-width:1180px;margin:0 auto;padding:40px 20px 72px;display:flex;flex-direction:column;gap:34px}
+.head h1{font-family:var(--display);font-weight:400;font-size:clamp(38px,6vw,76px);line-height:1.02;margin:0;text-wrap:balance}
+.head .rule{width:72px;height:2px;background:var(--gold);margin:22px 0 16px}
+.head p{margin:0;font-size:clamp(17px,2vw,24px);letter-spacing:.14em;color:var(--gold);font-weight:600;font-variant-numeric:tabular-nums}
+.feature{position:relative;display:block;width:100%;border:1px solid var(--line);border-radius:6px;overflow:hidden;background:#1b1813;padding:0;cursor:pointer;text-align:left;min-height:220px}
+.feature img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:.5}
+.feature .txt{position:relative;display:flex;flex-direction:column;gap:8px;justify-content:flex-end;min-height:220px;padding:26px 28px;background:linear-gradient(0deg,rgba(18,16,13,.92),rgba(18,16,13,.15))}
+.feature .t{font-family:var(--display);font-size:clamp(28px,4vw,46px);line-height:1.05}
+.feature .m,.tile .m{font-size:14px;letter-spacing:.1em;text-transform:uppercase;color:var(--gold);font-weight:600;font-variant-numeric:tabular-nums}
+.feature:hover,.tile:hover{border-color:var(--gold)}
+.group{display:flex;flex-direction:column;gap:14px}
+.group h2{font-family:var(--body);font-size:14px;font-weight:600;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);margin:0;padding-bottom:10px;border-bottom:1px solid var(--line)}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:14px}
+.tile{display:flex;flex-direction:column;text-align:left;padding:0;background:#1b1813;border:1px solid var(--line);border-radius:6px;overflow:hidden;cursor:pointer}
+.tile .cv{position:relative;width:100%;aspect-ratio:4/3;background:#221e17;overflow:hidden;flex:none}
+.tile .cv img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.tile .tx{display:flex;flex-direction:column;gap:6px;padding:12px 14px 14px}
+.tile .t{font-family:var(--display);font-size:22px;line-height:1.12;text-wrap:balance}
+.tile .s{font-size:14px;color:var(--muted);line-height:1.35}
+.tile .m{font-size:12.5px}
+
+/* ---------- lecteur ---------- */
+#player{position:fixed;inset:0;background:var(--bg);overflow:hidden}
+#stage{position:absolute;inset:0}
+.slide{position:absolute;inset:0;opacity:0;transition:opacity .9s ease;pointer-events:none}
+.slide.on{opacity:1;pointer-events:auto}
+.piece{position:absolute;top:14px;left:20px;right:20px;height:30px;line-height:30px;font-family:var(--display);font-size:24px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;z-index:3}
+.piece .ps{font-family:var(--body);font-size:14px;font-weight:500;color:var(--muted);letter-spacing:.02em;padding-left:16px}
+.media{position:absolute;inset:52px 16px 72px 16px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:0}
+.media .ph{flex:1 1 auto;min-height:0;width:100%;display:flex;align-items:center;justify-content:center}
+.media img{max-width:100%;max-height:100%;border-radius:3px;box-shadow:0 10px 40px rgba(0,0,0,.5);display:block}
+.cap{flex:none;height:38px;line-height:38px;font-size:15px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;white-space:nowrap}
+.cap b{color:var(--gold);font-weight:600}
+.cap i{font-style:normal;color:var(--muted);padding:0 .5em}
+#bar{position:absolute;left:0;right:0;bottom:0;height:64px;display:flex;align-items:center;gap:10px;padding:0 18px;z-index:5;transition:opacity .4s}
+#bar button,#bar select{font-size:15px;background:var(--panel);border:1px solid var(--line);border-radius:8px;height:38px;padding:0 14px;cursor:pointer}
+#bar button:hover,#bar select:hover{border-color:var(--gold)}
+#play.playing,#nums[aria-pressed="true"]{background:var(--gold);color:#1b160d;border-color:var(--gold);font-weight:600}
+#count{margin-left:auto;display:flex;align-items:center;gap:7px;font-variant-numeric:tabular-nums;color:var(--muted);font-size:14px;white-space:nowrap}
+#goto{width:58px;height:38px;text-align:center;background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:0 6px;font-size:15px;font-variant-numeric:tabular-nums;color:var(--ink)}
+#goto:hover,#goto:focus{border-color:var(--gold);outline:none}
+#jump{max-width:150px}
+#prog{position:absolute;left:0;bottom:0;height:3px;background:var(--gold);width:0;z-index:6;transition:width .4s ease}
+.nav{position:absolute;top:0;bottom:64px;width:18%;z-index:4;cursor:pointer;background:none;border:0}
+#navL{left:0}#navR{right:0}
+.lbl2{font-size:14px;color:var(--muted)}
+#msg{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;text-align:center;padding:24px;font-size:17px;color:var(--muted);z-index:2;pointer-events:none}
+body.idle #bar{opacity:0}
+body.idle #player{cursor:none}
+
+/* ---------- moments clés : plein cadre, grande date ---------- */
+.punch .slide{transition:opacity .45s ease}
+.punch .piece{display:none}
+.punch .media{inset:0 0 0 0}
+.punch .bg{position:absolute;inset:-40px;background-size:cover;background-position:center;filter:blur(30px) brightness(.38);transform:scale(1.1)}
+.punch .media img{border-radius:0;box-shadow:none;max-height:100%}
+.punch .slide.on .media img{animation:kb 7s linear forwards}
+@keyframes kb{from{transform:scale(1)}to{transform:scale(1.07)}}
+.punch .cap{position:absolute;left:28px;bottom:74px;height:auto;line-height:1.05;font-family:var(--display);font-weight:400;font-size:clamp(26px,4.6vw,60px);letter-spacing:0;text-transform:none;text-shadow:0 2px 18px rgba(0,0,0,.75);z-index:3}
+.features{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:14px}
+.card{display:flex;align-items:center;justify-content:center;padding:24px}
+.card span{font-family:var(--display);font-size:clamp(54px,13vw,190px);line-height:1;color:var(--gold);text-align:center;text-wrap:balance;font-variant-numeric:tabular-nums}
+
+/* ---------- planches : rangées de photos prises du même angle ---------- */
+.boards .media{inset:52px 44px 72px 44px;gap:12px}
+.boards .nav{width:36px;color:var(--muted);font-size:26px;display:flex;align-items:center;justify-content:center;opacity:.55}
+.boards .nav:hover{opacity:1;color:var(--gold)}
+.boards #navL::before{content:"‹"}
+.boards #navR::before{content:"›"}
+.brow{display:flex;flex-direction:column;align-items:stretch;flex:none}
+.rl{height:24px;line-height:22px;font-size:13.5px;font-weight:600;letter-spacing:.06em;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.rl::before{content:"";display:inline-block;width:18px;height:2px;background:var(--gold);vertical-align:middle;margin-right:10px}
+.row3{display:flex;justify-content:center;align-items:flex-start;gap:14px}
+.row3.col{flex-direction:column;align-items:center;gap:6px}
+.row3.col .cap{white-space:nowrap;overflow:visible}
+.row3 figure{margin:0;display:flex;flex-direction:column;align-items:center;flex:none}
+.boards .media .row3 img{display:block;width:100%;max-width:none;max-height:none;object-fit:cover;cursor:zoom-in;background:#1b1813}
+.boards .cap{height:34px;line-height:34px;font-size:13.5px;letter-spacing:.1em}
+.cap .num{color:var(--muted);font-weight:500;display:none}
+body.nums .cap .num{display:inline}
+.s-avant b{color:var(--avant)}
+.s-incendie b{color:var(--incendie)}
+.s-travaux b{color:var(--gold)}
+.s-apres b{color:var(--apres)}
+figure.narrow .cap{align-self:stretch;white-space:normal;line-height:15px;padding-top:3px;font-size:12px;letter-spacing:.06em;text-align:center;overflow:hidden}
+figure.narrow .cap i{padding:0 .3em}
+#nums{display:none}
+.boards #nums{display:inline-block}
+
+/* ---------- accueil : les trois classements ---------- */
+.features.two{grid-template-columns:repeat(auto-fit,minmax(300px,1fr))}
+.features.one{grid-template-columns:1fr}
+.features.one .feature{min-height:190px}
+.features.two .feature,.features.two .feature .txt{min-height:170px}
+.features.three{grid-template-columns:repeat(auto-fit,minmax(300px,1fr))}
+.feature .n{font-family:var(--display);font-size:56px;line-height:.9;color:var(--gold)}
+.featbox{display:flex;flex-direction:column;gap:8px}
+.featbox .feature{flex:1 1 auto}
+.chips{display:grid;grid-template-columns:repeat(2,1fr);gap:8px}
+.chip{display:flex;flex-direction:column;gap:2px;align-items:flex-start;background:#1b1813;border:1px solid var(--line);border-radius:6px;padding:9px 10px;cursor:pointer;text-align:left;min-width:0}
+.chip:hover{border-color:var(--gold)}
+.chip b{font-size:14px;font-weight:600;white-space:nowrap}
+.chip span{font-size:12px;color:var(--muted);font-variant-numeric:tabular-nums;white-space:nowrap}
+.tile{cursor:default}
+.tile .act{display:flex;flex-wrap:wrap;gap:8px;margin-top:6px}
+.tile .act button{background:none;border:1px solid var(--line);border-radius:999px;padding:6px 12px;font-size:13.5px;cursor:pointer}
+.tile .act button:hover{border-color:var(--gold);color:var(--gold)}
+.tile .act i{font-style:normal;color:var(--muted);padding-left:7px;font-variant-numeric:tabular-nums}
+.card{flex-direction:column;gap:20px}
+.card small{font-size:clamp(14px,1.9vw,22px);letter-spacing:.14em;text-transform:uppercase;color:var(--muted);font-weight:600;text-align:center}
+.boards .card span{font-size:clamp(34px,6.4vw,92px);max-width:18ch}
+
+/* ---------- plans superposés : un trait à glisser ---------- */
+.cmp{position:relative;flex:none;background:#fff;border-radius:3px;overflow:hidden;box-shadow:0 10px 40px rgba(0,0,0,.5)}
+.media .cmp img{position:absolute;inset:0;width:100%;height:100%;max-width:none;max-height:none;border-radius:0;box-shadow:none}
+.cmp .cb{position:absolute;top:0;bottom:0;width:3px;margin-left:-1.5px;background:var(--gold);box-shadow:0 0 0 1px rgba(0,0,0,.3);pointer-events:none}
+.cmp .cb::after{content:"‹ ›";position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:46px;height:46px;border-radius:50%;background:var(--gold);color:#1b160d;font-size:20px;font-weight:600;line-height:43px;text-align:center;white-space:nowrap;box-shadow:0 2px 10px rgba(0,0,0,.4)}
+.cmp .cl{position:absolute;bottom:10px;padding:5px 12px;border-radius:999px;background:rgba(18,16,13,.88);font-size:13.5px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;pointer-events:none;transition:opacity .2s}
+.cmp .cl.a{left:10px}
+.cmp .cl.b{right:10px}
+.cmp input{position:absolute;inset:0;width:100%;height:100%;margin:0;opacity:0;cursor:ew-resize;-webkit-appearance:none;appearance:none}
+.cmp:focus-within .cb{background:#fff}
+
+.piece .pn{font-family:var(--body);font-size:13px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--gold);margin-right:14px;white-space:nowrap}
+/* ---------- calques : les photos d'un même point de vue, l'une sur l'autre ---------- */
+.stkw{display:flex;flex-direction:column;align-items:center;gap:8px}
+.stk{position:relative;flex:none;overflow:hidden;border-radius:3px;background:#000;box-shadow:0 10px 40px rgba(0,0,0,.5);touch-action:none;cursor:ew-resize;user-select:none;-webkit-user-select:none}
+.stk .ly{position:absolute;inset:0;display:none;overflow:hidden}
+.stk .ly.on{display:block}
+.stk .ly.top{z-index:2}
+.stk .lb{position:absolute;inset:-40px;background-size:cover;background-position:center;filter:blur(24px) brightness(.45)}
+.media .stk .ly img{position:absolute;inset:0;width:100%;height:100%;max-width:none;max-height:none;object-fit:contain;border-radius:0;box-shadow:none;pointer-events:none}
+.stk .cb{position:absolute;top:0;bottom:0;width:3px;margin-left:-1.5px;background:var(--gold);box-shadow:0 0 0 1px rgba(0,0,0,.3);pointer-events:none;z-index:3}
+.stk .cb::after{content:"‹ ›";position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:46px;height:46px;border-radius:50%;background:var(--gold);color:#1b160d;font-size:20px;font-weight:600;line-height:43px;text-align:center;white-space:nowrap;box-shadow:0 2px 10px rgba(0,0,0,.4)}
+.stk .zb{position:absolute;top:10px;left:10px;z-index:4;width:40px;height:40px;border-radius:50%;border:1px solid var(--line);background:rgba(18,16,13,.8);font-size:18px;cursor:pointer;padding:0}
+.lc{display:flex;flex-wrap:wrap;justify-content:center;gap:6px;min-height:34px}
+.lc button{background:none;border:1px solid var(--line);border-radius:999px;padding:5px 12px;font-size:12.5px;cursor:pointer;white-space:nowrap;opacity:.5}
+.lc button.on{opacity:1;border-color:currentColor}
+.lc button b{font-weight:600;letter-spacing:.06em;text-transform:uppercase}
+.lc .num{display:none}
+body.nums .lc .num{display:inline}
+#lay[aria-pressed="true"]{background:var(--gold);color:#1b160d;border-color:var(--gold)}
+
+/* ---------- agrandissement d'une photo ---------- */
+#zoom{position:fixed;inset:0;z-index:20;background:rgba(10,9,7,.97);display:flex;flex-direction:column;align-items:stretch;padding:14px 14px 4px;touch-action:none;overscroll-behavior:contain}
+#zw{flex:1 1 auto;min-height:0;display:flex;align-items:center;justify-content:center;overflow:hidden;cursor:zoom-out}
+#zoom img{flex:none;max-width:none;max-height:none;border-radius:3px;box-shadow:0 10px 40px rgba(0,0,0,.6);cursor:zoom-in;transform-origin:50% 50%;user-select:none;-webkit-user-select:none;-webkit-user-drag:none}
+#zoom.zoomed img{cursor:grab;border-radius:0;box-shadow:none}
+#zoom .cap{flex:none;height:44px;line-height:44px;text-align:center}
+.zbar{position:absolute;top:12px;right:12px;z-index:2;display:flex;gap:8px}
+.zbar button{width:44px;height:44px;padding:0;border-radius:50%;border:1px solid var(--line);background:rgba(27,24,19,.92);font-size:22px;line-height:1;cursor:pointer}
+.zbar button:hover{border-color:var(--gold);color:var(--gold)}
+.zhint{position:absolute;left:16px;bottom:14px;font-size:12.5px;color:var(--muted);pointer-events:none}
+@media (max-width:900px){.zhint{display:none}}
+
+.hidden{display:none !important}
+@media (max-width:640px){
+  .wrap{padding:26px 14px 60px;gap:26px}
+  .piece{top:8px;left:10px;font-size:19px;height:26px;line-height:26px}
+  .piece .ps{display:none}
+  .media{inset:38px 8px 68px 8px}
+  .boards .media{inset:38px 8px 68px 8px;gap:6px}
+  .boards .nav{display:none}
+  .cap,.boards .cap{height:28px;line-height:28px;font-size:12px}
+  #bar{gap:6px;padding:0 10px}
+  #bar button,#bar select{padding:0 9px;font-size:14px}
+  .lbl,.lbl2{display:none}
+  .punch .cap{left:14px;bottom:72px}
+}
+@media (max-width:700px){
+  #bar{height:auto;min-height:64px;flex-wrap:wrap;row-gap:6px;padding:8px 10px 10px}
+  #fs{display:none}
+  #jump{max-width:128px}
+  #goto{width:50px;height:36px}
+  .media,.boards .media{bottom:112px}
+  .punch .cap{bottom:116px}
+}
+@media (prefers-reduced-motion:reduce){.slide,.punch .slide{transition:none}.punch .slide.on .media img{animation:none}}
+</style>
+</head>
+<body>
+<div id="home">
+  <div class="wrap">
+    <header class="head">
+      <h1>La Demeure</h1>
+      <div class="rule"></div>
+      <p>2017 – 2026</p>
+    </header>
+    <div id="homeBody" style="display:flex;flex-direction:column;gap:34px"></div>
+  </div>
+</div>
+
+<div id="player" class="hidden">
+  <div id="stage"></div>
+  <div id="msg" class="hidden"></div>
+  <button class="nav" id="navL" aria-label="Précédente"></button>
+  <button class="nav" id="navR" aria-label="Suivante"></button>
+  <div id="bar">
+    <button id="back" aria-label="Revenir à l'accueil">☰ <span class="lbl">Accueil</span></button>
+    <button id="prev" aria-label="Précédente">‹</button>
+    <button id="play" aria-label="Lecture automatique">▶ <span class="lbl">Défilement auto</span></button>
+    <button id="next" aria-label="Suivante">›</button>
+    <label for="speed" class="lbl2">Durée</label>
+    <select id="speed" aria-label="Durée d'affichage">
+      <option value="2">2 s</option>
+      <option value="3">3 s</option>
+      <option value="5" selected>5 s</option>
+      <option value="8">8 s</option>
+      <option value="12">12 s</option>
+    </select>
+    <button id="fs" aria-label="Plein écran">⛶ <span class="lbl">Plein écran</span></button>
+    <select id="jump" aria-label="Aller à une partie du diaporama"></select>
+    <button id="nums" aria-pressed="false" aria-label="Afficher les numéros des photos">N° <span class="lbl">des photos</span></button>
+    <button id="lay" class="hidden" aria-pressed="false" aria-label="Superposer les photos d'un même point de vue">◧ <span class="lbl">Calques</span></button>
+    <span id="count"><span class="lbl" id="countlbl">Vue</span> <input id="goto" type="text" inputmode="numeric" autocomplete="off" aria-label="Numéro de la vue : tapez un numéro pour y aller"> <span id="total"></span></span>
+  </div>
+  <div id="prog"></div>
+</div>
+
+<div id="zoom" class="hidden" role="dialog" aria-label="Photo agrandie">
+  <div class="zbar"><button id="zminus" type="button" aria-label="Réduire">−</button><button id="zplus" type="button" aria-label="Agrandir">+</button><button id="zclose" type="button" aria-label="Fermer">✕</button></div>
+  <div id="zw"><img id="zimg" alt="" draggable="false"></div>
+  <div class="cap" id="zcap"></div>
+  <div class="zhint">Clic sur la photo : loupe · molette ou deux doigts : zoom · glisser pour se déplacer</div>
+</div>
+
+<script>
+const DATA = {"ext":[{"key":"vue","title":"Le domaine, vues d'ensemble","sub":"","n":10,"years":"2016 – 2022","boards":[],"all":[{"id":"0540","d":"Photo ancienne","s":"ext","w":1080,"h":810,"pk":"x_vue_1.json"},{"id":"0542","d":"Photo ancienne","s":"ext","w":1080,"h":810,"pk":"x_vue_1.json"},{"id":"0438","d":"30 novembre 2016","s":"ext","w":1280,"h":960,"pk":"x_vue_1.json"},{"id":"0439","d":"30 novembre 2016","s":"ext","w":1280,"h":960,"pk":"x_vue_1.json"},{"id":"0472","d":"13 janvier 2017","s":"ext","w":1280,"h":960,"pk":"x_vue_1.json"},{"id":"0469","d":"16 avril 2017","s":"ext","w":1280,"h":763,"pk":"x_vue_1.json"},{"id":"0470","d":"16 avril 2017","s":"ext","w":1280,"h":766,"pk":"x_vue_1.json"},{"id":"0471","d":"16 avril 2017","s":"ext","w":1280,"h":601,"pk":"x_vue_1.json"},{"id":"0336","d":"12 mars 2020","s":"ext","w":1280,"h":368,"pk":"x_vue_2.json"},{"id":"0645","d":"2022","s":"ext","w":1280,"h":720,"pk":"x_vue_2.json"}]},{"key":"cour","title":"La cour et le marronnier","sub":"Devant la Demeure","n":20,"years":"2020 – 2025","boards":[],"all":[{"id":"0344","d":"19 mars 2020","s":"ext","w":1280,"h":722,"pk":"x_cour_1.json"},{"id":"0385","d":"24 avril 2020","s":"ext","w":1280,"h":960,"pk":"x_cour_1.json"},{"id":"0618","d":"8 mai 2020","s":"ext","w":1280,"h":611,"pk":"x_cour_1.json"},{"id":"0403","d":"28 mai 2020","s":"ext","w":1280,"h":960,"pk":"x_cour_1.json"},{"id":"0419","d":"2 juillet 2020","s":"ext","w":1280,"h":960,"pk":"x_cour_1.json"},{"id":"0430","d":"18 juillet 2020","s":"ext","w":1280,"h":773,"pk":"x_cour_1.json"},{"id":"0575","d":"31 octobre 2020","s":"ext","w":1280,"h":926,"pk":"x_cour_1.json"},{"id":"0622","d":"31 octobre 2020","s":"ext","w":1280,"h":960,"pk":"x_cour_1.json"},{"id":"0574","d":"31 octobre 2020","s":"ext","w":1280,"h":731,"pk":"x_cour_2.json"},{"id":"0666","d":"31 octobre 2020","s":"ext","w":1280,"h":894,"pk":"x_cour_2.json"},{"id":"0665","d":"29 mars 2021","s":"ext","w":960,"h":1280,"pk":"x_cour_2.json"},{"id":"0581","d":"26 octobre 2021","s":"ext","w":960,"h":1280,"pk":"x_cour_2.json"},{"id":"0604","d":"3 mai 2023","s":"ext","w":1280,"h":577,"pk":"x_cour_2.json"},{"id":"0605","d":"3 mai 2023","s":"ext","w":1280,"h":577,"pk":"x_cour_2.json"},{"id":"0619","d":"Juillet 2023","s":"ext","w":1280,"h":720,"pk":"x_cour_2.json"},{"id":"0532","d":"27 juillet 2023","s":"ext","w":720,"h":1280,"pk":"x_cour_2.json"},{"id":"0288","d":"27 mai 2024","s":"ext","w":1280,"h":720,"pk":"x_cour_3.json"},{"id":"0289","d":"27 mai 2024","s":"ext","w":1280,"h":720,"pk":"x_cour_3.json"},{"id":"0304","d":"10 mai 2025","s":"ext","w":1280,"h":720,"pk":"x_cour_3.json"},{"id":"0720","d":"11 juin 2025","s":"ext","w":828,"h":1280,"pk":"x_cour_3.json"}]},{"key":"facade","title":"La façade, la pergola et la terrasse","sub":"Le devant de la Demeure","n":41,"years":"2016 – 2026","boards":[{"sub":"La pergola vue de la gauche : marron, blanche, puis agrandie","p":[{"id":"0339","d":"15 mars 2020","s":"ext","w":1280,"h":722,"pk":"x_facade_1.json"},{"id":"0391","d":"24 avril 2020","s":"ext","w":1280,"h":960,"pk":"x_facade_3.json"},{"id":"0611","d":"6 mai 2023","s":"ext","w":1280,"h":577,"pk":"x_facade_4.json"}],"rows":[{"t":"","p":[{"id":"0339","d":"15 mars 2020","s":"ext","w":1280,"h":722,"pk":"x_facade_1.json"},{"id":"0391","d":"24 avril 2020","s":"ext","w":1280,"h":960,"pk":"x_facade_3.json"},{"id":"0611","d":"6 mai 2023","s":"ext","w":1280,"h":577,"pk":"x_facade_4.json"}]}]},{"sub":"La pergola de face : marron, blanche, puis agrandie","p":[{"id":"0347","d":"22 mars 2020","s":"ext","w":1280,"h":722,"pk":"x_terrasse-avant_1.json"},{"id":"0389","d":"24 avril 2020","s":"ext","w":1280,"h":960,"pk":"x_facade_3.json"},{"id":"0733","d":"6 mai 2023","s":"ext","w":1280,"h":673,"pk":"x_facade_4.json"}],"rows":[{"t":"","p":[{"id":"0347","d":"22 mars 2020","s":"ext","w":1280,"h":722,"pk":"x_terrasse-avant_1.json"},{"id":"0389","d":"24 avril 2020","s":"ext","w":1280,"h":960,"pk":"x_facade_3.json"},{"id":"0733","d":"6 mai 2023","s":"ext","w":1280,"h":673,"pk":"x_facade_4.json"}]}]},{"sub":"La pergola vue de près","p":[{"id":"0358","d":"26 mars 2020","s":"ext","w":1280,"h":857,"pk":"x_facade_1.json"},{"id":"0572","d":"28 mai 2020","s":"ext","w":1280,"h":960,"pk":"x_facade_3.json"},{"id":"0609","d":"6 mai 2023","s":"ext","w":1280,"h":577,"pk":"x_terrasse-avant_3.json"}],"rows":[{"t":"","p":[{"id":"0358","d":"26 mars 2020","s":"ext","w":1280,"h":857,"pk":"x_facade_1.json"},{"id":"0572","d":"28 mai 2020","s":"ext","w":1280,"h":960,"pk":"x_facade_3.json"},{"id":"0609","d":"6 mai 2023","s":"ext","w":1280,"h":577,"pk":"x_terrasse-avant_3.json"}]}]},{"sub":"La Demeure entière, de face","p":[{"id":"0730","d":"30 novembre 2016","s":"ext","w":1280,"h":922,"pk":"x_facade_1.json"},{"id":"0731","d":"18 juillet 2020","s":"ext","w":1280,"h":1027,"pk":"x_facade_3.json"},{"id":"0732","d":"31 octobre 2020","s":"ext","w":1280,"h":957,"pk":"x_facade_3.json"},{"id":"0610","d":"6 mai 2023","s":"ext","w":1280,"h":577,"pk":"x_facade_4.json"},{"id":"0285","d":"10 juillet 2023","s":"ext","w":1280,"h":720,"pk":"x_facade_5.json"}],"rows":[{"t":"","p":[{"id":"0730","d":"30 novembre 2016","s":"ext","w":1280,"h":922,"pk":"x_facade_1.json"},{"id":"0731","d":"18 juillet 2020","s":"ext","w":1280,"h":1027,"pk":"x_facade_3.json"},{"id":"0732","d":"31 octobre 2020","s":"ext","w":1280,"h":957,"pk":"x_facade_3.json"},{"id":"0610","d":"6 mai 2023","s":"ext","w":1280,"h":577,"pk":"x_facade_4.json"},{"id":"0285","d":"10 juillet 2023","s":"ext","w":1280,"h":720,"pk":"x_facade_5.json"}]}]}],"all":[{"id":"0449","d":"16 avril 2017","s":"ext","w":1280,"h":960,"pk":"x_facade_1.json"},{"id":"0338","d":"15 mars 2020","s":"ext","w":1280,"h":722,"pk":"x_facade_1.json"},{"id":"0355","d":"26 mars 2020","s":"ext","w":1280,"h":722,"pk":"x_facade_1.json"},{"id":"0570","d":"26 mars 2020","s":"ext","w":1280,"h":722,"pk":"x_facade_1.json"},{"id":"0371","d":"18 avril 2020","s":"ext","w":1280,"h":960,"pk":"x_facade_1.json"},{"id":"0374","d":"19 avril 2020","s":"ext","w":1280,"h":960,"pk":"x_facade_2.json"},{"id":"0380","d":"21 avril 2020","s":"ext","w":960,"h":1280,"pk":"x_facade_2.json"},{"id":"0381","d":"22 avril 2020","s":"ext","w":1280,"h":960,"pk":"x_facade_2.json"},{"id":"0382","d":"22 avril 2020","s":"ext","w":677,"h":497,"pk":"x_facade_2.json"},{"id":"0384","d":"23 avril 2020","s":"ext","w":960,"h":1280,"pk":"x_facade_2.json"},{"id":"0386","d":"24 avril 2020","s":"ext","w":1280,"h":960,"pk":"x_facade_2.json"},{"id":"0387","d":"24 avril 2020","s":"ext","w":1280,"h":960,"pk":"x_facade_2.json"},{"id":"0388","d":"24 avril 2020","s":"ext","w":960,"h":1280,"pk":"x_facade_2.json"},{"id":"0390","d":"24 avril 2020","s":"ext","w":1280,"h":960,"pk":"x_facade_3.json"},{"id":"0399","d":"22 mai 2020","s":"ext","w":960,"h":1280,"pk":"x_facade_3.json"},{"id":"0656","d":"22 juillet 2021","s":"ext","w":1280,"h":960,"pk":"x_facade_3.json"},{"id":"0516","d":"25 mars 2022","s":"ext","w":1280,"h":720,"pk":"x_facade_4.json"},{"id":"0517","d":"12 avril 2022","s":"ext","w":960,"h":1280,"pk":"x_facade_4.json"},{"id":"0518","d":"12 avril 2022","s":"ext","w":960,"h":1280,"pk":"x_facade_4.json"},{"id":"0520","d":"25 août 2022","s":"ext","w":1280,"h":720,"pk":"x_facade_4.json"},{"id":"0522","d":"30 septembre 2022","s":"ext","w":577,"h":1280,"pk":"x_facade_4.json"},{"id":"0301","d":"26 octobre 2024","s":"ext","w":1280,"h":720,"pk":"x_facade_5.json"},{"id":"0302","d":"26 octobre 2024","s":"ext","w":1280,"h":720,"pk":"x_facade_5.json"},{"id":"0292","d":"Janvier 2025","s":"ext","w":1080,"h":810,"pk":"x_facade_5.json"},{"id":"0293","d":"Janvier 2025","s":"ext","w":1080,"h":810,"pk":"x_facade_5.json"},{"id":"0627","d":"3 janvier 2026","s":"ext","w":1280,"h":964,"pk":"x_facade_5.json"},{"id":"0628","d":"3 janvier 2026","s":"ext","w":964,"h":1280,"pk":"x_facade_5.json"}]},{"key":"terrasse-avant","title":"La terrasse avant","sub":"Avant : des bosquets et deux parterres de fleurs","n":17,"years":"2017 – 2023","boards":[],"all":[{"id":"0450","d":"16 avril 2017","s":"ext","w":1280,"h":960,"pk":"x_terrasse-avant_1.json"},{"id":"0345","d":"19 mars 2020","s":"ext","w":1280,"h":722,"pk":"x_terrasse-avant_1.json"},{"id":"0346","d":"19 mars 2020","s":"ext","w":1280,"h":722,"pk":"x_terrasse-avant_1.json"},{"id":"0348","d":"22 mars 2020","s":"ext","w":1280,"h":722,"pk":"x_terrasse-avant_1.json"},{"id":"0349","d":"22 mars 2020","s":"ext","w":1280,"h":722,"pk":"x_terrasse-avant_1.json"},{"id":"0375","d":"19 avril 2020","s":"ext","w":1280,"h":960,"pk":"x_terrasse-avant_1.json"},{"id":"0379","d":"20 avril 2020","s":"ext","w":1280,"h":960,"pk":"x_terrasse-avant_1.json"},{"id":"0396","d":"21 mai 2020","s":"ext","w":1280,"h":870,"pk":"x_terrasse-avant_2.json"},{"id":"0521","d":"12 septembre 2022","s":"ext","w":1280,"h":577,"pk":"x_terrasse-avant_2.json"},{"id":"0523","d":"30 septembre 2022","s":"ext","w":1280,"h":577,"pk":"x_terrasse-avant_2.json"},{"id":"0525","d":"3 février 2023","s":"ext","w":1280,"h":577,"pk":"x_terrasse-avant_2.json"},{"id":"0554","d":"Printemps 2023","s":"ext","w":1119,"h":839,"pk":"x_terrasse-avant_2.json"},{"id":"0294","d":"Avril 2023","s":"ext","w":1280,"h":960,"pk":"x_terrasse-avant_2.json"},{"id":"0607","d":"4 mai 2023","s":"ext","w":1280,"h":577,"pk":"x_terrasse-avant_2.json"},{"id":"0608","d":"4 mai 2023","s":"ext","w":1280,"h":577,"pk":"x_terrasse-avant_2.json"},{"id":"0620","d":"Juillet 2023","s":"ext","w":1280,"h":720,"pk":"x_terrasse-avant_3.json"},{"id":"0286","d":"13 juillet 2023","s":"ext","w":1280,"h":720,"pk":"x_terrasse-avant_3.json"}]},{"key":"arriere","title":"L'arrière de la Demeure","sub":"","n":2,"years":"2017 – 2020","boards":[],"all":[{"id":"0452","d":"16 avril 2017","s":"ext","w":1280,"h":960,"pk":"x_arriere_1.json"},{"id":"0357","d":"26 mars 2020","s":"ext","w":1280,"h":722,"pk":"x_arriere_1.json"}]},{"key":"longere","title":"La longère","sub":"","n":7,"years":"2016 – 2020","boards":[{"sub":"La longère, de face","p":[{"id":"0448","d":"16 avril 2017","s":"ext","w":1280,"h":960,"pk":"x_longere_1.json"},{"id":"0655","d":"31 octobre 2020","s":"ext","w":1280,"h":858,"pk":"x_longere_1.json"}],"rows":[{"t":"","p":[{"id":"0448","d":"16 avril 2017","s":"ext","w":1280,"h":960,"pk":"x_longere_1.json"},{"id":"0655","d":"31 octobre 2020","s":"ext","w":1280,"h":858,"pk":"x_longere_1.json"}]}]}],"all":[{"id":"0437","d":"30 novembre 2016","s":"ext","w":1043,"h":889,"pk":"x_longere_1.json"},{"id":"0443","d":"30 novembre 2016","s":"ext","w":1280,"h":960,"pk":"x_longere_1.json"},{"id":"0444","d":"30 novembre 2016","s":"ext","w":1280,"h":960,"pk":"x_longere_1.json"},{"id":"0447","d":"16 avril 2017","s":"ext","w":1280,"h":960,"pk":"x_longere_1.json"},{"id":"0429","d":"18 juillet 2020","s":"ext","w":1280,"h":960,"pk":"x_longere_1.json"}]},{"key":"carriere","title":"La carrière","sub":"","n":13,"years":"2016 – 2025","boards":[{"sub":"La carrière et le sapin","p":[{"id":"0432","d":"30 novembre 2016","s":"ext","w":1280,"h":960,"pk":"x_carriere_1.json"},{"id":"0615","d":"Février 2022","s":"ext","w":1280,"h":903,"pk":"x_carriere_2.json"},{"id":"0728","d":"2 septembre 2025","s":"ext","w":1280,"h":720,"pk":"x_carriere_2.json"}],"rows":[{"t":"","p":[{"id":"0432","d":"30 novembre 2016","s":"ext","w":1280,"h":960,"pk":"x_carriere_1.json"},{"id":"0615","d":"Février 2022","s":"ext","w":1280,"h":903,"pk":"x_carriere_2.json"},{"id":"0728","d":"2 septembre 2025","s":"ext","w":1280,"h":720,"pk":"x_carriere_2.json"}]}]}],"all":[{"id":"0541","d":"Photo ancienne","s":"ext","w":1080,"h":810,"pk":"x_carriere_1.json"},{"id":"0451","d":"16 avril 2017","s":"ext","w":1280,"h":960,"pk":"x_carriere_1.json"},{"id":"0453","d":"16 avril 2017","s":"ext","w":1280,"h":785,"pk":"x_carriere_1.json"},{"id":"0454","d":"16 avril 2017","s":"ext","w":1280,"h":960,"pk":"x_carriere_1.json"},{"id":"0455","d":"16 avril 2017","s":"ext","w":1280,"h":960,"pk":"x_carriere_1.json"},{"id":"0660","d":"20 février 2020","s":"ext","w":1280,"h":722,"pk":"x_carriere_1.json"},{"id":"0369","d":"12 avril 2020","s":"ext","w":1280,"h":960,"pk":"x_carriere_1.json"},{"id":"0372","d":"18 avril 2020","s":"ext","w":960,"h":1280,"pk":"x_carriere_2.json"},{"id":"0595","d":"Juin 2024","s":"ext","w":866,"h":1280,"pk":"x_carriere_2.json"},{"id":"0303","d":"15 avril 2025","s":"ext","w":1280,"h":720,"pk":"x_carriere_2.json"}]},{"key":"manege","title":"Le manège","sub":"","n":15,"years":"2016 – 2025","boards":[{"sub":"Le manège, des pare-bottes verts aux pare-bottes noirs","p":[{"id":"0434","d":"30 novembre 2016","s":"ext","w":1280,"h":960,"pk":"x_manege_1.json"},{"id":"0335","d":"25 février 2020","s":"ext","w":1280,"h":722,"pk":"x_manege_1.json"},{"id":"0584","d":"11 février 2022","s":"ext","w":1280,"h":960,"pk":"x_manege_1.json"},{"id":"0616","d":"Février 2022","s":"ext","w":1280,"h":720,"pk":"x_manege_1.json"},{"id":"0539","d":"Avril 2022","s":"ext","w":1080,"h":608,"pk":"x_manege_2.json"},{"id":"0295","d":"Mai 2024","s":"ext","w":1280,"h":960,"pk":"x_manege_2.json"}],"rows":[{"t":"","p":[{"id":"0434","d":"30 novembre 2016","s":"ext","w":1280,"h":960,"pk":"x_manege_1.json"},{"id":"0335","d":"25 février 2020","s":"ext","w":1280,"h":722,"pk":"x_manege_1.json"},{"id":"0584","d":"11 février 2022","s":"ext","w":1280,"h":960,"pk":"x_manege_1.json"}]},{"t":"","p":[{"id":"0616","d":"Février 2022","s":"ext","w":1280,"h":720,"pk":"x_manege_1.json"},{"id":"0539","d":"Avril 2022","s":"ext","w":1080,"h":608,"pk":"x_manege_2.json"},{"id":"0295","d":"Mai 2024","s":"ext","w":1280,"h":960,"pk":"x_manege_2.json"}]}]},{"sub":"Le manège, deuxième point de vue","p":[{"id":"0582","d":"7 février 2022","s":"ext","w":1280,"h":960,"pk":"x_manege_1.json"},{"id":"0647","d":"Février 2022","s":"ext","w":1280,"h":719,"pk":"x_manege_1.json"},{"id":"0305","d":"24 mai 2025","s":"ext","w":1280,"h":720,"pk":"x_manege_2.json"}],"rows":[{"t":"","p":[{"id":"0582","d":"7 février 2022","s":"ext","w":1280,"h":960,"pk":"x_manege_1.json"},{"id":"0647","d":"Février 2022","s":"ext","w":1280,"h":719,"pk":"x_manege_1.json"},{"id":"0305","d":"24 mai 2025","s":"ext","w":1280,"h":720,"pk":"x_manege_2.json"}]}]},{"sub":"Le manège, troisième point de vue","p":[{"id":"0583","d":"8 février 2022","s":"ext","w":1280,"h":960,"pk":"x_manege_1.json"},{"id":"0596","d":"18 avril 2022","s":"ext","w":1280,"h":720,"pk":"x_manege_2.json"}],"rows":[{"t":"","p":[{"id":"0583","d":"8 février 2022","s":"ext","w":1280,"h":960,"pk":"x_manege_1.json"},{"id":"0596","d":"18 avril 2022","s":"ext","w":1280,"h":720,"pk":"x_manege_2.json"}]}]}],"all":[{"id":"0617","d":"Février 2022","s":"ext","w":1280,"h":719,"pk":"x_manege_1.json"},{"id":"0646","d":"Février 2022","s":"ext","w":1280,"h":719,"pk":"x_manege_2.json"},{"id":"0538","d":"Avril 2022","s":"ext","w":1080,"h":580,"pk":"x_manege_2.json"},{"id":"0535","d":"2022","s":"ext","w":1280,"h":720,"pk":"x_manege_2.json"}]},{"key":"ecuries","title":"Les écuries","sub":"","n":29,"years":"2016 – 2026","boards":[{"sub":"Les mangeoires en béton, puis l'allée","p":[{"id":"0459","d":"16 avril 2017","s":"ext","w":1280,"h":960,"pk":"x_ecuries_1.json"},{"id":"0333","d":"25 février 2020","s":"ext","w":722,"h":1280,"pk":"x_ecuries_2.json"},{"id":"0565","d":"25 février 2020","s":"ext","w":1280,"h":722,"pk":"x_ecuries_2.json"},{"id":"0528","d":"13 juin 2023","s":"ext","w":1280,"h":720,"pk":"x_ecuries_4.json"},{"id":"0551","d":"23 septembre 2026","s":"ext","w":1280,"h":960,"pk":"x_ecuries_4.json"}],"rows":[{"t":"","p":[{"id":"0459","d":"16 avril 2017","s":"ext","w":1280,"h":960,"pk":"x_ecuries_1.json"},{"id":"0333","d":"25 février 2020","s":"ext","w":722,"h":1280,"pk":"x_ecuries_2.json"},{"id":"0565","d":"25 février 2020","s":"ext","w":1280,"h":722,"pk":"x_ecuries_2.json"},{"id":"0528","d":"13 juin 2023","s":"ext","w":1280,"h":720,"pk":"x_ecuries_4.json"},{"id":"0551","d":"23 septembre 2026","s":"ext","w":1280,"h":960,"pk":"x_ecuries_4.json"}]}]},{"sub":"La démolition des auges","p":[{"id":"0562","d":"24 février 2020","s":"ext","w":1280,"h":722,"pk":"x_ecuries_2.json"},{"id":"0332","d":"24 février 2020","s":"ext","w":1280,"h":722,"pk":"x_ecuries_2.json"},{"id":"0360","d":"30 mars 2020","s":"ext","w":722,"h":1280,"pk":"x_ecuries_2.json"},{"id":"0361","d":"30 mars 2020","s":"ext","w":1280,"h":722,"pk":"x_ecuries_2.json"},{"id":"0373","d":"19 avril 2020","s":"ext","w":1280,"h":960,"pk":"x_ecuries_3.json"}],"rows":[{"t":"","p":[{"id":"0562","d":"24 février 2020","s":"ext","w":1280,"h":722,"pk":"x_ecuries_2.json"},{"id":"0332","d":"24 février 2020","s":"ext","w":1280,"h":722,"pk":"x_ecuries_2.json"},{"id":"0360","d":"30 mars 2020","s":"ext","w":722,"h":1280,"pk":"x_ecuries_2.json"},{"id":"0361","d":"30 mars 2020","s":"ext","w":1280,"h":722,"pk":"x_ecuries_2.json"},{"id":"0373","d":"19 avril 2020","s":"ext","w":1280,"h":960,"pk":"x_ecuries_3.json"}]}],"flat":1},{"sub":"Les boxes et la sellerie","p":[{"id":"0446","d":"30 novembre 2016","s":"ext","w":960,"h":1280,"pk":"x_ecuries_1.json"},{"id":"0461","d":"16 avril 2017","s":"ext","w":960,"h":1280,"pk":"x_ecuries_1.json"},{"id":"0462","d":"16 avril 2017","s":"ext","w":1280,"h":960,"pk":"x_ecuries_1.json"},{"id":"0322","d":"19 février 2020","s":"ext","w":1280,"h":722,"pk":"x_ecuries_1.json"}],"rows":[{"t":"","p":[{"id":"0446","d":"30 novembre 2016","s":"ext","w":960,"h":1280,"pk":"x_ecuries_1.json"},{"id":"0461","d":"16 avril 2017","s":"ext","w":960,"h":1280,"pk":"x_ecuries_1.json"},{"id":"0462","d":"16 avril 2017","s":"ext","w":1280,"h":960,"pk":"x_ecuries_1.json"},{"id":"0322","d":"19 février 2020","s":"ext","w":1280,"h":722,"pk":"x_ecuries_1.json"}]}],"flat":1},{"sub":"La sellerie","p":[{"id":"0526","d":"20 avril 2023","s":"ext","w":577,"h":1280,"pk":"x_ecuries_3.json"},{"id":"0527","d":"20 avril 2023","s":"ext","w":577,"h":1280,"pk":"x_ecuries_3.json"}],"rows":[{"t":"","p":[{"id":"0526","d":"20 avril 2023","s":"ext","w":577,"h":1280,"pk":"x_ecuries_3.json"},{"id":"0527","d":"20 avril 2023","s":"ext","w":577,"h":1280,"pk":"x_ecuries_3.json"}]}],"flat":1},{"sub":"Cloisonné avant son arrivée, puis tout ouvert","p":[{"id":"0460","d":"16 avril 2017","s":"ext","w":1280,"h":960,"pk":"x_ecuries_1.json"},{"id":"0623","d":"25 décembre 2020","s":"ext","w":1280,"h":960,"pk":"x_ecuries_3.json"}],"rows":[{"t":"","p":[{"id":"0460","d":"16 avril 2017","s":"ext","w":1280,"h":960,"pk":"x_ecuries_1.json"},{"id":"0623","d":"25 décembre 2020","s":"ext","w":1280,"h":960,"pk":"x_ecuries_3.json"}]}]}],"all":[{"id":"0543","d":"Photo ancienne","s":"ext","w":1080,"h":810,"pk":"x_ecuries_1.json"},{"id":"0328","d":"22 février 2020","s":"ext","w":1280,"h":722,"pk":"x_ecuries_1.json"},{"id":"0334","d":"25 février 2020","s":"ext","w":1280,"h":722,"pk":"x_ecuries_2.json"},{"id":"0359","d":"29 mars 2020","s":"ext","w":1280,"h":722,"pk":"x_ecuries_2.json"},{"id":"0383","d":"23 avril 2020","s":"ext","w":1280,"h":226,"pk":"x_ecuries_3.json"},{"id":"0580","d":"31 mai 2021","s":"ext","w":1280,"h":599,"pk":"x_ecuries_3.json"},{"id":"0680","d":"21 avril 2022","s":"ext","w":1280,"h":960,"pk":"x_ecuries_3.json"},{"id":"0519","d":"27 avril 2022","s":"ext","w":1280,"h":502,"pk":"x_ecuries_3.json"},{"id":"0725","d":"15 janvier 2025","s":"ext","w":1280,"h":866,"pk":"x_ecuries_4.json"},{"id":"0726","d":"15 janvier 2025","s":"ext","w":1280,"h":656,"pk":"x_ecuries_4.json"},{"id":"0727","d":"15 janvier 2025","s":"ext","w":923,"h":1280,"pk":"x_ecuries_4.json"}]},{"key":"carport","title":"Le carport","sub":"","n":2,"years":"2023","boards":[],"all":[{"id":"0530","d":"12 juillet 2023","s":"ext","w":720,"h":1280,"pk":"x_carport_1.json"},{"id":"0531","d":"12 juillet 2023","s":"ext","w":720,"h":1280,"pk":"x_carport_1.json"}]},{"key":"hangar","title":"Le hangar à foin et la grange","sub":"","n":8,"years":"2016 – 2020","boards":[],"all":[{"id":"0445","d":"30 novembre 2016","s":"ext","w":1280,"h":960,"pk":"x_hangar_1.json"},{"id":"0473","d":"16 avril 2017","s":"ext","w":1280,"h":960,"pk":"x_hangar_1.json"},{"id":"0456","d":"16 avril 2017","s":"ext","w":1280,"h":960,"pk":"x_hangar_1.json"},{"id":"0463","d":"16 avril 2017","s":"ext","w":1280,"h":960,"pk":"x_hangar_1.json"},{"id":"0464","d":"16 avril 2017","s":"ext","w":1280,"h":960,"pk":"x_hangar_1.json"},{"id":"0465","d":"16 avril 2017","s":"ext","w":1280,"h":960,"pk":"x_hangar_1.json"},{"id":"0326","d":"21 février 2020","s":"ext","w":1280,"h":722,"pk":"x_hangar_1.json"},{"id":"0327","d":"21 février 2020","s":"ext","w":1280,"h":722,"pk":"x_hangar_1.json"}]},{"key":"trail","title":"Le mountain trail","sub":"","n":29,"years":"2021 – 2025","boards":[],"all":[{"id":"0638","d":"Mai 2021","s":"ext","w":1024,"h":768,"pk":"x_trail_1.json"},{"id":"0658","d":"Mai 2021","s":"ext","w":1280,"h":923,"pk":"x_trail_1.json"},{"id":"0659","d":"Mai 2021","s":"ext","w":1280,"h":960,"pk":"x_trail_1.json"},{"id":"0633","d":"19 avril 2022","s":"ext","w":1280,"h":764,"pk":"x_trail_1.json"},{"id":"0641","d":"21 mai 2022","s":"ext","w":1280,"h":960,"pk":"x_trail_1.json"},{"id":"0642","d":"24 mai 2022","s":"ext","w":1280,"h":720,"pk":"x_trail_1.json"},{"id":"0643","d":"7 juillet 2022","s":"ext","w":1280,"h":720,"pk":"x_trail_1.json"},{"id":"0644","d":"8 octobre 2022","s":"ext","w":1280,"h":577,"pk":"x_trail_1.json"},{"id":"0524","d":"21 octobre 2022","s":"ext","w":1280,"h":577,"pk":"x_trail_2.json"},{"id":"0760","d":"Mai 2023","s":"ext","w":1280,"h":853,"pk":"x_trail_2.json"},{"id":"0676","d":"Mai 2023","s":"ext","w":1280,"h":853,"pk":"x_trail_2.json"},{"id":"0667","d":"Mai 2023","s":"ext","w":1280,"h":853,"pk":"x_trail_2.json"},{"id":"0739","d":"Mai 2023","s":"ext","w":1280,"h":853,"pk":"x_trail_2.json"},{"id":"0670","d":"Mai 2023","s":"ext","w":1280,"h":853,"pk":"x_trail_2.json"},{"id":"0745","d":"Mai 2023","s":"ext","w":1280,"h":853,"pk":"x_trail_2.json"},{"id":"0748","d":"Mai 2023","s":"ext","w":1280,"h":853,"pk":"x_trail_2.json"},{"id":"0751","d":"Mai 2023","s":"ext","w":1280,"h":853,"pk":"x_trail_3.json"},{"id":"0754","d":"Mai 2023","s":"ext","w":1280,"h":853,"pk":"x_trail_3.json"},{"id":"0762","d":"Mai 2023","s":"ext","w":1280,"h":853,"pk":"x_trail_3.json"},{"id":"0765","d":"Mai 2023","s":"ext","w":1280,"h":853,"pk":"x_trail_3.json"},{"id":"0674","d":"Mai 2023","s":"ext","w":1280,"h":853,"pk":"x_trail_3.json"},{"id":"0770","d":"Mai 2023","s":"ext","w":1280,"h":853,"pk":"x_trail_3.json"},{"id":"0778","d":"Mai 2023","s":"ext","w":1280,"h":853,"pk":"x_trail_3.json"},{"id":"0782","d":"Mai 2023","s":"ext","w":1280,"h":853,"pk":"x_trail_3.json"},{"id":"0772","d":"Mai 2023","s":"ext","w":1280,"h":853,"pk":"x_trail_4.json"},{"id":"0544","d":"11 mai 2024","s":"ext","w":1280,"h":960,"pk":"x_trail_4.json"},{"id":"0545","d":"12 août 2024","s":"ext","w":720,"h":1280,"pk":"x_trail_4.json"},{"id":"0546","d":"22 septembre 2024","s":"ext","w":1280,"h":720,"pk":"x_trail_4.json"},{"id":"0585","d":"22 juillet 2025","s":"ext","w":1280,"h":960,"pk":"x_trail_4.json"}]},{"key":"cross","title":"Le cross","sub":"","n":6,"years":"2022 – 2026","boards":[],"all":[{"id":"0714","d":"2022","s":"ext","w":1280,"h":960,"pk":"x_cross_1.json"},{"id":"0715","d":"2022","s":"ext","w":1280,"h":960,"pk":"x_cross_1.json"},{"id":"0684","d":"2022","s":"ext","w":1280,"h":720,"pk":"x_cross_1.json"},{"id":"0717","d":"2022","s":"ext","w":1280,"h":598,"pk":"x_cross_1.json"},{"id":"0718","d":"2022","s":"ext","w":1280,"h":720,"pk":"x_cross_1.json"},{"id":"0591","d":"22 septembre 2026","s":"ext","w":1280,"h":720,"pk":"x_cross_1.json"}]},{"key":"patures","title":"Les pâtures, l'étang et le ruisseau","sub":"","n":35,"years":"2016 – 2026","boards":[],"all":[{"id":"0433","d":"30 novembre 2016","s":"ext","w":1280,"h":960,"pk":"x_patures_1.json"},{"id":"0441","d":"30 novembre 2016","s":"ext","w":1280,"h":960,"pk":"x_patures_1.json"},{"id":"0442","d":"30 novembre 2016","s":"ext","w":1280,"h":960,"pk":"x_patures_1.json"},{"id":"0467","d":"16 avril 2017","s":"ext","w":1280,"h":960,"pk":"x_patures_1.json"},{"id":"0468","d":"16 avril 2017","s":"ext","w":1280,"h":960,"pk":"x_patures_1.json"},{"id":"0431","d":"5 mai 2017","s":"ext","w":1280,"h":960,"pk":"x_patures_1.json"},{"id":"0482","d":"Février 2020","s":"ext","w":1024,"h":1024,"pk":"x_patures_1.json"},{"id":"0330","d":"24 février 2020","s":"ext","w":722,"h":1280,"pk":"x_patures_1.json"},{"id":"0557","d":"2020","s":"ext","w":1119,"h":839,"pk":"x_patures_2.json"},{"id":"0342","d":"17 mars 2020","s":"ext","w":722,"h":1280,"pk":"x_patures_2.json"},{"id":"0343","d":"17 mars 2020","s":"ext","w":1280,"h":722,"pk":"x_patures_2.json"},{"id":"0362","d":"7 avril 2020","s":"ext","w":1280,"h":960,"pk":"x_patures_2.json"},{"id":"0364","d":"8 avril 2020","s":"ext","w":1280,"h":960,"pk":"x_patures_2.json"},{"id":"0365","d":"8 avril 2020","s":"ext","w":1280,"h":960,"pk":"x_patures_2.json"},{"id":"0366","d":"8 avril 2020","s":"ext","w":1280,"h":960,"pk":"x_patures_2.json"},{"id":"0367","d":"8 avril 2020","s":"ext","w":960,"h":1280,"pk":"x_patures_2.json"},{"id":"0368","d":"8 avril 2020","s":"ext","w":1280,"h":960,"pk":"x_patures_3.json"},{"id":"0652","d":"11 avril 2020","s":"ext","w":1280,"h":960,"pk":"x_patures_3.json"},{"id":"0370","d":"16 avril 2020","s":"ext","w":1280,"h":960,"pk":"x_patures_3.json"},{"id":"0412","d":"19 juin 2020","s":"ext","w":1280,"h":321,"pk":"x_patures_3.json"},{"id":"0413","d":"19 juin 2020","s":"ext","w":1280,"h":293,"pk":"x_patures_3.json"},{"id":"0573","d":"30 août 2020","s":"ext","w":1280,"h":960,"pk":"x_patures_3.json"},{"id":"0600","d":"Octobre 2020","s":"ext","w":1280,"h":960,"pk":"x_patures_3.json"},{"id":"0601","d":"Octobre 2020","s":"ext","w":960,"h":1280,"pk":"x_patures_3.json"},{"id":"0602","d":"Octobre 2020","s":"ext","w":960,"h":1280,"pk":"x_patures_4.json"},{"id":"0639","d":"Octobre 2020","s":"ext","w":960,"h":1280,"pk":"x_patures_4.json"},{"id":"0624","d":"12 avril 2021","s":"ext","w":1280,"h":960,"pk":"x_patures_4.json"},{"id":"0625","d":"28 mai 2021","s":"ext","w":1280,"h":960,"pk":"x_patures_4.json"},{"id":"0640","d":"8 mai 2022","s":"ext","w":960,"h":1280,"pk":"x_patures_4.json"},{"id":"0612","d":"18 mai 2023","s":"ext","w":1280,"h":577,"pk":"x_patures_4.json"},{"id":"0297","d":"6 septembre 2024","s":"ext","w":720,"h":1280,"pk":"x_patures_4.json"},{"id":"0298","d":"6 septembre 2024","s":"ext","w":1280,"h":720,"pk":"x_patures_4.json"},{"id":"0299","d":"6 septembre 2024","s":"ext","w":720,"h":1280,"pk":"x_patures_5.json"},{"id":"0548","d":"15 mai 2026","s":"ext","w":1280,"h":960,"pk":"x_patures_5.json"},{"id":"0550","d":"5 août 2026","s":"ext","w":960,"h":1280,"pk":"x_patures_5.json"}]},{"key":"loisirs","title":"La piscine, les jeux et les soirées","sub":"","n":13,"years":"2016 – 2026","boards":[{"sub":"L'endroit du terrain de pétanque, puis la clôture en bois","p":[{"id":"0553","d":"Novembre 2020","s":"ext","w":1280,"h":576,"pk":"x_loisirs_1.json"},{"id":"0290","d":"27 mai 2024","s":"ext","w":1280,"h":720,"pk":"x_cour_3.json"},{"id":"0634","d":"Juillet 2025","s":"ext","w":720,"h":540,"pk":"x_loisirs_1.json"}],"rows":[{"t":"","p":[{"id":"0553","d":"Novembre 2020","s":"ext","w":1280,"h":576,"pk":"x_loisirs_1.json"},{"id":"0290","d":"27 mai 2024","s":"ext","w":1280,"h":720,"pk":"x_cour_3.json"},{"id":"0634","d":"Juillet 2025","s":"ext","w":720,"h":540,"pk":"x_loisirs_1.json"}]}]}],"all":[{"id":"0435","d":"30 novembre 2016","s":"ext","w":1280,"h":960,"pk":"x_loisirs_1.json"},{"id":"0436","d":"30 novembre 2016","s":"ext","w":1280,"h":960,"pk":"x_loisirs_1.json"},{"id":"0466","d":"16 avril 2017","s":"ext","w":1280,"h":960,"pk":"x_loisirs_1.json"},{"id":"0428","d":"13 juillet 2020","s":"ext","w":1280,"h":960,"pk":"x_loisirs_1.json"},{"id":"0603","d":"10 avril 2023","s":"ext","w":981,"h":1280,"pk":"x_loisirs_1.json"},{"id":"0547","d":"12 juillet 2025","s":"ext","w":960,"h":1280,"pk":"x_loisirs_1.json"},{"id":"0635","d":"Juillet 2025","s":"ext","w":720,"h":540,"pk":"x_loisirs_2.json"},{"id":"0632","d":"1er septembre 2025","s":"ext","w":1280,"h":960,"pk":"x_loisirs_2.json"},{"id":"0587","d":"22 mai 2026","s":"ext","w":1280,"h":964,"pk":"x_loisirs_2.json"},{"id":"0631","d":"5 juin 2026","s":"ext","w":720,"h":1280,"pk":"x_loisirs_2.json"}]},{"key":"entree","title":"L'entrée, le chemin et les panneaux","sub":"","n":7,"years":"2020 – 2026","boards":[],"all":[{"id":"0323","d":"20 février 2020","s":"ext","w":1280,"h":722,"pk":"x_entree_1.json"},{"id":"0325","d":"20 février 2020","s":"ext","w":1096,"h":1280,"pk":"x_entree_1.json"},{"id":"0629","d":"3 janvier 2026","s":"ext","w":964,"h":1280,"pk":"x_entree_1.json"},{"id":"0630","d":"29 mai 2026","s":"ext","w":964,"h":1280,"pk":"x_entree_1.json"},{"id":"0588","d":"3 septembre 2026","s":"ext","w":1280,"h":720,"pk":"x_entree_1.json"},{"id":"0589","d":"3 septembre 2026","s":"ext","w":720,"h":1280,"pk":"x_entree_1.json"},{"id":"0590","d":"3 septembre 2026","s":"ext","w":1280,"h":720,"pk":"x_entree_1.json"}]},{"key":"parking3","title":"Le parking n° 3","sub":"","n":1,"years":"2023","boards":[],"all":[{"id":"0613","d":"12 juin 2023","s":"ext","w":1280,"h":720,"pk":"x_parking3_1.json"}]},{"key":"enclos","title":"Le parking voitures et l'enclos des chiens","sub":"","n":13,"years":"2016 – 2026","boards":[{"sub":"Vu du chemin : l'herbe et l'arbre, puis le parking","p":[{"id":"0457","d":"16 avril 2017","s":"ext","w":1280,"h":960,"pk":"x_enclos_1.json"},{"id":"0458","d":"16 avril 2017","s":"ext","w":1280,"h":960,"pk":"x_enclos_1.json"},{"id":"0320","d":"17 août 2025","s":"ext","w":1280,"h":720,"pk":"x_enclos_2.json"}],"rows":[{"t":"","p":[{"id":"0457","d":"16 avril 2017","s":"ext","w":1280,"h":960,"pk":"x_enclos_1.json"},{"id":"0458","d":"16 avril 2017","s":"ext","w":1280,"h":960,"pk":"x_enclos_1.json"},{"id":"0320","d":"17 août 2025","s":"ext","w":1280,"h":720,"pk":"x_enclos_2.json"}]}]},{"sub":"De l'herbe et un arbre, puis la pelleteuse","p":[{"id":"0440","d":"30 novembre 2016","s":"ext","w":1280,"h":960,"pk":"x_enclos_1.json"},{"id":"0577","d":"9 novembre 2020","s":"ext","w":1280,"h":960,"pk":"x_enclos_1.json"}],"rows":[{"t":"","p":[{"id":"0440","d":"30 novembre 2016","s":"ext","w":1280,"h":960,"pk":"x_enclos_1.json"},{"id":"0577","d":"9 novembre 2020","s":"ext","w":1280,"h":960,"pk":"x_enclos_1.json"}]}]},{"sub":"Le terrassement, puis le parking","p":[{"id":"0579","d":"17 novembre 2020","s":"ext","w":1280,"h":960,"pk":"x_enclos_1.json","fit":[0.19,0.18,0.57]},{"id":"0287","d":"14 juillet 2023","s":"ext","w":1280,"h":720,"pk":"x_enclos_1.json"},{"id":"0626","d":"4 octobre 2025","s":"ext","w":1280,"h":720,"pk":"x_enclos_2.json"}],"rows":[{"t":"","p":[{"id":"0579","d":"17 novembre 2020","s":"ext","w":1280,"h":960,"pk":"x_enclos_1.json","fit":[0.19,0.18,0.57]},{"id":"0287","d":"14 juillet 2023","s":"ext","w":1280,"h":720,"pk":"x_enclos_1.json"},{"id":"0626","d":"4 octobre 2025","s":"ext","w":1280,"h":720,"pk":"x_enclos_2.json"}]}]},{"sub":"La tranchée, puis l'enclos des chiens","p":[{"id":"0578","d":"9 novembre 2020","s":"ext","w":960,"h":1280,"pk":"x_enclos_1.json"},{"id":"0533","d":"12 octobre 2023","s":"ext","w":1280,"h":577,"pk":"x_enclos_2.json"},{"id":"0534","d":"6 janvier 2024","s":"ext","w":1280,"h":720,"pk":"x_enclos_2.json"},{"id":"0549","d":"25 mai 2026","s":"ext","w":1280,"h":960,"pk":"x_enclos_2.json"}],"rows":[{"t":"","p":[{"id":"0578","d":"9 novembre 2020","s":"ext","w":960,"h":1280,"pk":"x_enclos_1.json"},{"id":"0533","d":"12 octobre 2023","s":"ext","w":1280,"h":577,"pk":"x_enclos_2.json"},{"id":"0534","d":"6 janvier 2024","s":"ext","w":1280,"h":720,"pk":"x_enclos_2.json"},{"id":"0549","d":"25 mai 2026","s":"ext","w":1280,"h":960,"pk":"x_enclos_2.json"}]}]}],"all":[{"id":"0576","d":"9 novembre 2020","s":"ext","w":960,"h":1280,"pk":"x_enclos_1.json"}]},{"key":"rond","title":"Le rond de longe","sub":"","n":1,"years":"2025","boards":[],"all":[{"id":"0696","d":"21 mai 2025","s":"ext","w":1280,"h":720,"pk":"x_rond_1.json"}]},{"key":"poulailler","title":"Le poulailler","sub":"","n":2,"years":"2020","boards":[],"all":[{"id":"0571","d":"3 mai 2020","s":"ext","w":1280,"h":960,"pk":"x_poulailler_1.json"},{"id":"0392","d":"3 mai 2020","s":"ext","w":1280,"h":960,"pk":"x_poulailler_1.json"}]}],"longere":{"title":"D'une salle commune de camping à mon logement","boards":[{"sub":"Salon","p":[{"id":"P50","d":"16 avril 2017","s":"ext","w":1280,"h":960,"pk":"l_1.json"},{"id":"P22","d":"26 mai 2020","s":"ext","w":1280,"h":960,"pk":"l_1.json"},{"id":"P59","d":"25 mars 2026","s":"ext","w":1280,"h":964,"pk":"l_1.json"}],"rows":[{"t":"","p":[{"id":"P50","d":"16 avril 2017","s":"ext","w":1280,"h":960,"pk":"l_1.json"},{"id":"P22","d":"26 mai 2020","s":"ext","w":1280,"h":960,"pk":"l_1.json"},{"id":"P59","d":"25 mars 2026","s":"ext","w":1280,"h":964,"pk":"l_1.json"}]}]},{"sub":"Cuisine","p":[{"id":"P29","d":"18 juin 2020","s":"ext","w":1280,"h":960,"pk":"l_1.json"},{"id":"P58","d":"4 mars 2026","s":"ext","w":964,"h":1280,"pk":"l_1.json"}],"rows":[{"t":"","p":[{"id":"P29","d":"18 juin 2020","s":"ext","w":1280,"h":960,"pk":"l_1.json"},{"id":"P58","d":"4 mars 2026","s":"ext","w":964,"h":1280,"pk":"l_1.json"}]}]},{"sub":"Chambre","p":[{"id":"P30","d":"22 juin 2020","s":"ext","w":1280,"h":960,"pk":"l_1.json"},{"id":"P61","d":"23 octobre 2026","s":"ext","w":1280,"h":720,"pk":"l_1.json"}],"rows":[{"t":"","p":[{"id":"P30","d":"22 juin 2020","s":"ext","w":1280,"h":960,"pk":"l_1.json"},{"id":"P61","d":"23 octobre 2026","s":"ext","w":1280,"h":720,"pk":"l_1.json"}]}]},{"sub":"Gîte Vintage","p":[{"id":"P53","d":"16 avril 2017","s":"ext","w":1280,"h":960,"pk":"l_1.json"},{"id":"P34","d":"2 juillet 2020","s":"ext","w":1280,"h":960,"pk":"l_2.json"},{"id":"P04","d":"Juillet 2020","s":"ext","w":1280,"h":444,"pk":"l_2.json"},{"id":"P03","d":"Juillet 2020","s":"ext","w":480,"h":360,"pk":"l_2.json"}],"rows":[{"t":"","p":[{"id":"P53","d":"16 avril 2017","s":"ext","w":1280,"h":960,"pk":"l_1.json"},{"id":"P34","d":"2 juillet 2020","s":"ext","w":1280,"h":960,"pk":"l_2.json"},{"id":"P04","d":"Juillet 2020","s":"ext","w":1280,"h":444,"pk":"l_2.json"},{"id":"P03","d":"Juillet 2020","s":"ext","w":480,"h":360,"pk":"l_2.json"}]}]},{"sub":"Coin repas","p":[{"id":"P54","d":"16 avril 2017","s":"ext","w":1280,"h":960,"pk":"l_2.json"},{"id":"P33","d":"2 juillet 2020","s":"ext","w":1280,"h":960,"pk":"l_2.json"},{"id":"P08","d":"Juillet 2020","s":"ext","w":480,"h":360,"pk":"l_2.json"}],"rows":[{"t":"","p":[{"id":"P54","d":"16 avril 2017","s":"ext","w":1280,"h":960,"pk":"l_2.json"},{"id":"P33","d":"2 juillet 2020","s":"ext","w":1280,"h":960,"pk":"l_2.json"},{"id":"P08","d":"Juillet 2020","s":"ext","w":480,"h":360,"pk":"l_2.json"}]}]},{"sub":"Coin nuit","p":[{"id":"P53","d":"16 avril 2017","s":"ext","w":1280,"h":960,"pk":"l_1.json"},{"id":"P03","d":"Juillet 2020","s":"ext","w":480,"h":360,"pk":"l_2.json"}],"rows":[{"t":"","p":[{"id":"P53","d":"16 avril 2017","s":"ext","w":1280,"h":960,"pk":"l_1.json"},{"id":"P03","d":"Juillet 2020","s":"ext","w":480,"h":360,"pk":"l_2.json"}]}]},{"sub":"Couloir","p":[{"id":"P51","d":"17 avril 2017","s":"ext","w":960,"h":1280,"pk":"l_2.json"},{"id":"P25","d":"5 juin 2020","s":"ext","w":960,"h":1280,"pk":"l_2.json"}],"rows":[{"t":"","p":[{"id":"P51","d":"17 avril 2017","s":"ext","w":960,"h":1280,"pk":"l_2.json"},{"id":"P25","d":"5 juin 2020","s":"ext","w":960,"h":1280,"pk":"l_2.json"}]}]},{"sub":"Salle d'eau","p":[{"id":"P10","d":"2019","s":"ext","w":1280,"h":960,"pk":"l_3.json"},{"id":"P21","d":"26 mai 2020","s":"ext","w":1280,"h":960,"pk":"l_3.json"},{"id":"P39","d":"2 juillet 2020","s":"ext","w":1280,"h":960,"pk":"l_3.json"}],"rows":[{"t":"","p":[{"id":"P10","d":"2019","s":"ext","w":1280,"h":960,"pk":"l_3.json"},{"id":"P21","d":"26 mai 2020","s":"ext","w":1280,"h":960,"pk":"l_3.json"},{"id":"P39","d":"2 juillet 2020","s":"ext","w":1280,"h":960,"pk":"l_3.json"}]}]},{"sub":"Coin chauffe-eau","p":[{"id":"P64","d":"2019","s":"ext","w":1280,"h":960,"pk":"l_3.json"},{"id":"P20","d":"26 mai 2020","s":"ext","w":1280,"h":960,"pk":"l_3.json"},{"id":"P38","d":"2 juillet 2020","s":"ext","w":1280,"h":960,"pk":"l_3.json"}],"rows":[{"t":"","p":[{"id":"P64","d":"2019","s":"ext","w":1280,"h":960,"pk":"l_3.json"},{"id":"P20","d":"26 mai 2020","s":"ext","w":1280,"h":960,"pk":"l_3.json"},{"id":"P38","d":"2 juillet 2020","s":"ext","w":1280,"h":960,"pk":"l_3.json"}]}]},{"sub":"Salle de bain","p":[{"id":"P65","d":"2019","s":"ext","w":1280,"h":960,"pk":"l_3.json"},{"id":"P26","d":"5 juin 2020","s":"ext","w":1280,"h":960,"pk":"l_3.json"},{"id":"P05","d":"Juillet 2020","s":"ext","w":360,"h":480,"pk":"l_4.json"}],"rows":[{"t":"","p":[{"id":"P65","d":"2019","s":"ext","w":1280,"h":960,"pk":"l_3.json"},{"id":"P26","d":"5 juin 2020","s":"ext","w":1280,"h":960,"pk":"l_3.json"},{"id":"P05","d":"Juillet 2020","s":"ext","w":360,"h":480,"pk":"l_4.json"}]}]},{"sub":"Porte-fenêtre","p":[{"id":"P62","d":"12 novembre 2026","s":"ext","w":720,"h":1280,"pk":"l_4.json"}],"rows":[{"t":"","p":[{"id":"P62","d":"12 novembre 2026","s":"ext","w":720,"h":1280,"pk":"l_4.json"}]}]}],"n":26},"rooms":[{"key":"hall","title":"Hall d'entrée, canapés et fléchettes","group":"Rez-de-chaussée","sub":"Avant : la salle de jeux et son billard","years":"2017 – 2025","boards":[{"sub":"Le mur de la porte, côté billard","rows":[{"t":"","p":[{"id":"0030","d":"16 avril 2017","s":"avant","w":1400,"h":1050},{"id":"0144","d":"11 octobre 2021","s":"incendie","w":1400,"h":1050},{"id":"0038","d":"Février 2022","s":"travaux","w":1400,"h":1050},{"id":"0219","d":"12 mai 2023","s":"apres","w":1400,"h":631},{"id":"0317","d":"17 juillet 2025","s":"apres","w":1400,"h":788}]}]},{"sub":"L'angle de la fenêtre et des fléchettes","rows":[{"t":"","p":[{"id":"0138","d":"12 octobre 2020","s":"avant","w":1400,"h":1050},{"id":"0157","d":"10 décembre 2021","s":"incendie","w":1400,"h":1050},{"id":"0318","d":"15 août 2025","s":"apres","w":1400,"h":788}]}]},{"sub":"Vers la pièce de l'escalier","rows":[{"t":"","p":[{"id":"0196","d":"12 octobre 2020","s":"avant","w":1400,"h":1050},{"id":"0104","d":"12 janvier 2023","s":"apres","w":1400,"h":631},{"id":"0309","d":"17 juillet 2025","s":"apres","w":1400,"h":788}]}]}],"all":[{"id":"0030","d":"16 avril 2017","s":"avant","w":1400,"h":1050},{"id":"0196","d":"12 octobre 2020","s":"avant","w":1400,"h":1050},{"id":"0138","d":"12 octobre 2020","s":"avant","w":1400,"h":1050},{"id":"0144","d":"11 octobre 2021","s":"incendie","w":1400,"h":1050},{"id":"0157","d":"10 décembre 2021","s":"incendie","w":1400,"h":1050},{"id":"0038","d":"Février 2022","s":"travaux","w":1400,"h":1050},{"id":"0093","d":"15 novembre 2022","s":"travaux","w":1400,"h":631},{"id":"0100","d":"8 décembre 2022","s":"travaux","w":1400,"h":631},{"id":"0102","d":"25 décembre 2022","s":"apres","w":1400,"h":631},{"id":"0104","d":"12 janvier 2023","s":"apres","w":1400,"h":631},{"id":"0218","d":"12 mai 2023","s":"apres","w":631,"h":1400},{"id":"0219","d":"12 mai 2023","s":"apres","w":1400,"h":631},{"id":"0107","d":"14 septembre 2023","s":"apres","w":1400,"h":631},{"id":"0170","d":"9 décembre 2024","s":"apres","w":1400,"h":1050},{"id":"0171","d":"9 décembre 2024","s":"apres","w":1400,"h":1050},{"id":"0307","d":"17 juillet 2025","s":"apres","w":1400,"h":788},{"id":"0308","d":"17 juillet 2025","s":"apres","w":1400,"h":788},{"id":"0309","d":"17 juillet 2025","s":"apres","w":1400,"h":788},{"id":"0317","d":"17 juillet 2025","s":"apres","w":1400,"h":788},{"id":"0318","d":"15 août 2025","s":"apres","w":1400,"h":788}]},{"key":"escalier","title":"Escalier et bar","group":"Rez-de-chaussée","sub":"Avant : le bureau à la cheminée","years":"2017 – 2025","boards":[{"sub":"Le mur de la cheminée, devenu le départ de l'escalier","rows":[{"t":"","p":[{"id":"0024","d":"16 avril 2017","s":"avant","w":1400,"h":1050},{"id":"0042","d":"Novembre 2020","s":"incendie","w":360,"h":480},{"id":"0156","d":"10 décembre 2021","s":"incendie","w":1400,"h":1050},{"id":"0222","d":"Juillet 2023","s":"apres","w":1400,"h":788}]}]}],"all":[{"id":"0024","d":"16 avril 2017","s":"avant","w":1400,"h":1050},{"id":"0042","d":"Novembre 2020","s":"incendie","w":360,"h":480},{"id":"0152","d":"16 octobre 2021","s":"incendie","w":1400,"h":1050},{"id":"0156","d":"10 décembre 2021","s":"incendie","w":1400,"h":1050},{"id":"0164","d":"10 décembre 2021","s":"incendie","w":1050,"h":1400},{"id":"0155","d":"10 décembre 2021","s":"travaux","w":1400,"h":1050},{"id":"0087","d":"30 octobre 2022","s":"travaux","w":1400,"h":631},{"id":"0097","d":"25 novembre 2022","s":"travaux","w":631,"h":1400},{"id":"0098","d":"30 novembre 2022","s":"travaux","w":1400,"h":631},{"id":"0103","d":"12 janvier 2023","s":"apres","w":1400,"h":631},{"id":"0207","d":"21 janvier 2023","s":"apres","w":631,"h":1400},{"id":"0208","d":"21 janvier 2023","s":"apres","w":631,"h":1400},{"id":"0221","d":"Juillet 2023","s":"apres","w":1400,"h":788},{"id":"0222","d":"Juillet 2023","s":"apres","w":1400,"h":788},{"id":"0109","d":"5 décembre 2023","s":"apres","w":1050,"h":1400},{"id":"0166","d":"9 décembre 2024","s":"apres","w":1400,"h":1050},{"id":"0167","d":"9 décembre 2024","s":"apres","w":1050,"h":1400},{"id":"0178","d":"8 janvier 2025","s":"apres","w":1400,"h":1054},{"id":"0179","d":"17 juillet 2025","s":"apres","w":1400,"h":788},{"id":"0306","d":"17 juillet 2025","s":"apres","w":1400,"h":788},{"id":"0180","d":"17 juillet 2025","s":"apres","w":1400,"h":788}]},{"key":"billard","title":"Salle du billard","group":"Rez-de-chaussée","sub":"Avant : la salle zen","years":"2020 – 2026","boards":[{"sub":"Vers la porte du SPA et le mur de pierre","rows":[{"t":"","p":[{"id":"0198","d":"12 octobre 2020","s":"avant","w":1400,"h":1050},{"id":"0145","d":"11 octobre 2021","s":"incendie","w":1050,"h":1400},{"id":"0158","d":"10 décembre 2021","s":"incendie","w":1400,"h":1050}]},{"t":"","p":[{"id":"0088","d":"30 octobre 2022","s":"travaux","w":1400,"h":631},{"id":"0108","d":"4 décembre 2023","s":"apres","w":1400,"h":1050},{"id":"0314","d":"17 juillet 2025","s":"apres","w":1400,"h":788}]}]},{"sub":"La salle aujourd'hui","rows":[{"t":"","p":[{"id":"0721","d":"4 octobre 2024","s":"apres","w":1400,"h":788},{"id":"0722","d":"4 octobre 2024","s":"apres","w":1400,"h":788},{"id":"0723","d":"4 octobre 2024","s":"apres","w":1400,"h":788},{"id":"0724","d":"4 octobre 2024","s":"apres","w":1400,"h":788}]}],"flat":1}],"all":[{"id":"0198","d":"12 octobre 2020","s":"avant","w":1400,"h":1050},{"id":"0145","d":"11 octobre 2021","s":"incendie","w":1050,"h":1400},{"id":"0158","d":"10 décembre 2021","s":"incendie","w":1400,"h":1050},{"id":"0037","d":"Février 2022","s":"travaux","w":1400,"h":1050},{"id":"0088","d":"30 octobre 2022","s":"travaux","w":1400,"h":631},{"id":"0224","d":"4 décembre 2023","s":"apres","w":1400,"h":1050},{"id":"0108","d":"4 décembre 2023","s":"apres","w":1400,"h":1050},{"id":"0110","d":"5 décembre 2023","s":"apres","w":1400,"h":1050},{"id":"0502","d":"4 octobre 2024","s":"apres","w":1400,"h":788},{"id":"0721","d":"4 octobre 2024","s":"apres","w":1400,"h":788},{"id":"0722","d":"4 octobre 2024","s":"apres","w":1400,"h":788},{"id":"0723","d":"4 octobre 2024","s":"apres","w":1400,"h":788},{"id":"0503","d":"4 octobre 2024","s":"apres","w":1400,"h":788},{"id":"0724","d":"4 octobre 2024","s":"apres","w":1400,"h":788},{"id":"0169","d":"9 décembre 2024","s":"apres","w":1050,"h":1400},{"id":"0314","d":"17 juillet 2025","s":"apres","w":1400,"h":788},{"id":"0172","d":"22 juillet 2025","s":"apres","w":1400,"h":1050},{"id":"0174","d":"22 juillet 2025","s":"apres","w":1400,"h":1050},{"id":"0175","d":"29 juillet 2025","s":"apres","w":1400,"h":1050},{"id":"0176","d":"29 juillet 2025","s":"apres","w":1050,"h":1400},{"id":"0177","d":"29 juillet 2025","s":"apres","w":1400,"h":1050},{"id":"0223","d":"5 juin 2026","s":"apres","w":787,"h":1400}]},{"key":"refectoire","title":"Réfectoire et cuisine","group":"Rez-de-chaussée","sub":"Avant : la salle à manger commune","years":"2017 – 2023","boards":[{"sub":"Vers la porte-fenêtre","rows":[{"t":"","p":[{"id":"0029","d":"17 avril 2017","s":"avant","w":1400,"h":1050},{"id":"0214","d":"12 mai 2023","s":"apres","w":1400,"h":631}]}]},{"sub":"Vers le mur du radiateur, autour du pilier","rows":[{"t":"","p":[{"id":"0197","d":"12 octobre 2020","s":"avant","w":1400,"h":1050},{"id":"0216","d":"12 mai 2023","s":"apres","w":1400,"h":631}]}]},{"sub":"La cuisine à gauche, la porte au fond","rows":[{"t":"","p":[{"id":"0096","d":"23 novembre 2022","s":"travaux","w":1400,"h":631},{"id":"0217","d":"12 mai 2023","s":"apres","w":1400,"h":631}]}]}],"all":[{"id":"0028","d":"16 avril 2017","s":"avant","w":500,"h":375},{"id":"0029","d":"17 avril 2017","s":"avant","w":1400,"h":1050},{"id":"0197","d":"12 octobre 2020","s":"avant","w":1400,"h":1050},{"id":"0143","d":"11 octobre 2021","s":"incendie","w":1400,"h":1050},{"id":"0059","d":"24 mars 2022","s":"travaux","w":1400,"h":788},{"id":"0096","d":"23 novembre 2022","s":"travaux","w":1400,"h":631},{"id":"0213","d":"13 février 2023","s":"apres","w":1400,"h":1171},{"id":"0214","d":"12 mai 2023","s":"apres","w":1400,"h":631},{"id":"0215","d":"12 mai 2023","s":"apres","w":1400,"h":631},{"id":"0216","d":"12 mai 2023","s":"apres","w":1400,"h":631},{"id":"0217","d":"12 mai 2023","s":"apres","w":1400,"h":631},{"id":"0220","d":"18 mai 2023","s":"apres","w":1400,"h":631}]},{"key":"wc-rdc","title":"WC du rez-de-chaussée","group":"Rez-de-chaussée","sub":"À côté du réfectoire","years":"2022 – 2026","boards":[{"sub":"Depuis la porte","rows":[{"t":"","p":[{"id":"0129","d":"9 novembre 2022","s":"travaux","w":1400,"h":630},{"id":"0511","d":"17 novembre 2026","s":"apres","w":1400,"h":788}]}]}],"all":[{"id":"0129","d":"9 novembre 2022","s":"travaux","w":1400,"h":630},{"id":"0511","d":"17 novembre 2026","s":"apres","w":1400,"h":788}]},{"key":"spa","title":"SPA et sauna","group":"Rez-de-chaussée","sub":"Avant : la salle de bain et deux WC","years":"2021 – 2025","boards":[{"sub":"L'ancienne salle de bain, devenue le SPA","rows":[{"t":"","p":[{"id":"0062","d":"25 mars 2022","s":"travaux","w":1400,"h":788},{"id":"0094","d":"15 novembre 2022","s":"travaux","w":631,"h":1400},{"id":"0101","d":"10 décembre 2022","s":"travaux","w":1400,"h":631},{"id":"0276","d":"Janvier 2025","s":"apres","w":1400,"h":788}]}]},{"sub":"Les deux toilettes, devenues le sauna","rows":[{"t":"","p":[{"id":"0163","d":"10 décembre 2021","s":"travaux","w":1050,"h":1400},{"id":"0275","d":"Janvier 2025","s":"apres","w":787,"h":1400}]}]},{"sub":"Le SPA, deuxième angle","rows":[{"t":"","p":[{"id":"0074","d":"26 juillet 2022","s":"travaux","w":787,"h":1400},{"id":"0277","d":"Janvier 2025","s":"apres","w":1400,"h":788},{"id":"0279","d":"Janvier 2025","s":"apres","w":1400,"h":788}]}]},{"sub":"Le SPA, troisième angle","rows":[{"t":"","p":[{"id":"0067","d":"13 avril 2022","s":"travaux","w":1400,"h":1050},{"id":"0073","d":"26 juillet 2022","s":"travaux","w":1400,"h":788},{"id":"0278","d":"Janvier 2025","s":"apres","w":1400,"h":788}]}]}],"all":[{"id":"0163","d":"10 décembre 2021","s":"travaux","w":1050,"h":1400},{"id":"0062","d":"25 mars 2022","s":"travaux","w":1400,"h":788},{"id":"0067","d":"13 avril 2022","s":"travaux","w":1400,"h":1050},{"id":"0073","d":"26 juillet 2022","s":"travaux","w":1400,"h":788},{"id":"0074","d":"26 juillet 2022","s":"travaux","w":787,"h":1400},{"id":"0086","d":"27 octobre 2022","s":"travaux","w":1400,"h":631},{"id":"0094","d":"15 novembre 2022","s":"travaux","w":631,"h":1400},{"id":"0099","d":"8 décembre 2022","s":"travaux","w":631,"h":1400},{"id":"0101","d":"10 décembre 2022","s":"travaux","w":1400,"h":631},{"id":"0274","d":"Janvier 2025","s":"apres","w":787,"h":1400},{"id":"0275","d":"Janvier 2025","s":"apres","w":787,"h":1400},{"id":"0276","d":"Janvier 2025","s":"apres","w":1400,"h":788},{"id":"0277","d":"Janvier 2025","s":"apres","w":1400,"h":788},{"id":"0278","d":"Janvier 2025","s":"apres","w":1400,"h":788},{"id":"0279","d":"Janvier 2025","s":"apres","w":1400,"h":788},{"id":"0280","d":"Janvier 2025","s":"apres","w":787,"h":1400}]},{"key":"arriere-cuisine","title":"Arrière-cuisine du gîte","group":"Rez-de-chaussée","sub":"","years":"2017 – 2026","boards":[{"sub":"Vers la porte et les étagères","rows":[{"t":"","p":[{"id":"0031","d":"16 avril 2017","s":"avant","w":1400,"h":1050},{"id":"0509","d":"17 novembre 2026","s":"apres","w":1400,"h":788}]}]}],"all":[{"id":"0031","d":"16 avril 2017","s":"avant","w":1400,"h":1050},{"id":"0509","d":"17 novembre 2026","s":"apres","w":1400,"h":788},{"id":"0510","d":"17 novembre 2026","s":"apres","w":1400,"h":788}]},{"key":"arriere-cuisine-privee","title":"Arrière-cuisine privée","group":"Rez-de-chaussée","sub":"Avant : la cuisine commune","years":"2017 – 2026","boards":[{"sub":"Le mur de la grande armoire froide","rows":[{"t":"","p":[{"id":"0025","d":"16 avril 2017","s":"avant","w":1400,"h":1050},{"id":"0508","d":"17 novembre 2026","s":"apres","w":1400,"h":788}]}]}],"all":[{"id":"0025","d":"16 avril 2017","s":"avant","w":1400,"h":1050},{"id":"0507","d":"17 novembre 2026","s":"apres","w":1400,"h":788},{"id":"0508","d":"17 novembre 2026","s":"apres","w":1400,"h":788}]},{"key":"lingerie","title":"Lingerie","group":"Rez-de-chaussée","sub":"Avant : la salle à manger d'amis","years":"2017 – 2026","boards":[{"sub":"Vers la baie vitrée de l'arrière-cuisine","rows":[{"t":"","p":[{"id":"0026","d":"16 avril 2017","s":"avant","w":1400,"h":1050},{"id":"0154","d":"10 décembre 2021","s":"incendie","w":1050,"h":1400},{"id":"0095","d":"15 novembre 2022","s":"travaux","w":1400,"h":631},{"id":"0504","d":"17 novembre 2026","s":"apres","w":1400,"h":788}]}]},{"sub":"Vers la fenêtre","rows":[{"t":"","p":[{"id":"0027","d":"16 avril 2017","s":"avant","w":1400,"h":1050},{"id":"0505","d":"17 novembre 2026","s":"apres","w":1400,"h":788},{"id":"0506","d":"17 novembre 2026","s":"apres","w":1400,"h":788}]}]}],"all":[{"id":"0026","d":"16 avril 2017","s":"avant","w":1400,"h":1050},{"id":"0027","d":"16 avril 2017","s":"avant","w":1400,"h":1050},{"id":"0153","d":"16 octobre 2021","s":"incendie","w":1400,"h":1050},{"id":"0154","d":"10 décembre 2021","s":"incendie","w":1050,"h":1400},{"id":"0095","d":"15 novembre 2022","s":"travaux","w":1400,"h":631},{"id":"0512","d":"17 novembre 2026","s":"apres","w":1400,"h":788},{"id":"0504","d":"17 novembre 2026","s":"apres","w":1400,"h":788},{"id":"0505","d":"17 novembre 2026","s":"apres","w":1400,"h":788},{"id":"0506","d":"17 novembre 2026","s":"apres","w":1400,"h":788}]},{"key":"couloir","title":"Couloir de l'étage","group":"Étage","sub":"","years":"2017 – 2023","boards":[{"sub":"Le mur de pierre et les deux portes","rows":[{"t":"","p":[{"id":"0159","d":"10 décembre 2021","s":"incendie","w":1400,"h":1050},{"id":"0081","d":"26 juillet 2022","s":"travaux","w":787,"h":1400},{"id":"0209","d":"21 janvier 2023","s":"apres","w":631,"h":1400}]}]},{"sub":"Depuis le bout du couloir","rows":[{"t":"","p":[{"id":"0019","d":"16 avril 2017","s":"avant","w":1400,"h":1050},{"id":"0053","d":"24 mars 2022","s":"travaux","w":1400,"h":788},{"id":"0080","d":"26 juillet 2022","s":"travaux","w":787,"h":1400},{"id":"0091","d":"15 novembre 2022","s":"travaux","w":631,"h":1400},{"id":"0212","d":"3 février 2023","s":"apres","w":1400,"h":631}]}]}],"all":[{"id":"0019","d":"16 avril 2017","s":"avant","w":1400,"h":1050},{"id":"0159","d":"10 décembre 2021","s":"incendie","w":1400,"h":1050},{"id":"0053","d":"24 mars 2022","s":"travaux","w":1400,"h":788},{"id":"0064","d":"30 mars 2022","s":"travaux","w":1400,"h":1050},{"id":"0080","d":"26 juillet 2022","s":"travaux","w":787,"h":1400},{"id":"0081","d":"26 juillet 2022","s":"travaux","w":787,"h":1400},{"id":"0091","d":"15 novembre 2022","s":"travaux","w":631,"h":1400},{"id":"0209","d":"21 janvier 2023","s":"apres","w":631,"h":1400},{"id":"0210","d":"22 janvier 2023","s":"apres","w":631,"h":1400},{"id":"0211","d":"22 janvier 2023","s":"apres","w":631,"h":1400},{"id":"0212","d":"3 février 2023","s":"apres","w":1400,"h":631},{"id":"0106","d":"4 août 2023","s":"apres","w":1400,"h":788}]},{"key":"sanitaires","title":"Sanitaires communs","group":"Étage","sub":"Avant : les lavabos et les douches","years":"2017 – 2026","boards":[{"sub":"Depuis l'entrée, les lavabos à gauche","rows":[{"t":"","p":[{"id":"0054","d":"24 mars 2022","s":"incendie","w":787,"h":1400},{"id":"0075","d":"26 juillet 2022","s":"travaux","w":787,"h":1400},{"id":"0186","d":"10 avril 2026","s":"apres","w":1400,"h":1054}]}]},{"sub":"Le mur des lavabos","rows":[{"t":"","p":[{"id":"0228","d":"Juillet 2023","s":"apres","w":1400,"h":788},{"id":"0182","d":"10 avril 2026","s":"apres","w":1400,"h":1054}]}]},{"sub":"Les douches","rows":[{"t":"","p":[{"id":"0078","d":"26 juillet 2022","s":"travaux","w":1400,"h":788},{"id":"0226","d":"3 février 2023","s":"apres","w":631,"h":1400},{"id":"0183","d":"10 avril 2026","s":"apres","w":1054,"h":1400}]}]}],"all":[{"id":"0021","d":"16 avril 2017","s":"avant","w":1400,"h":1050},{"id":"0054","d":"24 mars 2022","s":"incendie","w":787,"h":1400},{"id":"0065","d":"30 mars 2022","s":"travaux","w":1050,"h":1400},{"id":"0075","d":"26 juillet 2022","s":"travaux","w":787,"h":1400},{"id":"0078","d":"26 juillet 2022","s":"travaux","w":1400,"h":788},{"id":"0226","d":"3 février 2023","s":"apres","w":631,"h":1400},{"id":"0227","d":"3 février 2023","s":"apres","w":1400,"h":715},{"id":"0228","d":"Juillet 2023","s":"apres","w":1400,"h":788},{"id":"0182","d":"10 avril 2026","s":"apres","w":1400,"h":1054},{"id":"0183","d":"10 avril 2026","s":"apres","w":1054,"h":1400},{"id":"0184","d":"10 avril 2026","s":"apres","w":1054,"h":1400},{"id":"0186","d":"10 avril 2026","s":"apres","w":1400,"h":1054},{"id":"0193","d":"10 avril 2026","s":"apres","w":1054,"h":1400},{"id":"0195","d":"10 avril 2026","s":"apres","w":1400,"h":1054}]},{"key":"orientale","title":"L'Orientale","group":"Étage","sub":"Avant : la salle de rangement et l'escalier ouest","years":"2019 – 2023","boards":[{"sub":"Depuis l'entrée, vers la fenêtre","rows":[{"t":"","p":[{"id":"0004","d":"Décembre 2019","s":"avant","w":1400,"h":1050},{"id":"0146","d":"11 octobre 2021","s":"incendie","w":1400,"h":1050},{"id":"0076","d":"26 juillet 2022","s":"travaux","w":787,"h":1400},{"id":"0253","d":"Juillet 2023","s":"apres","w":1307,"h":771}]}]},{"sub":"Vers l'entrée et la salle d'eau","rows":[{"t":"","p":[{"id":"0077","d":"26 juillet 2022","s":"travaux","w":1400,"h":788},{"id":"0260","d":"Janvier 2023","s":"apres","w":1400,"h":650},{"id":"0255","d":"Juillet 2023","s":"apres","w":1400,"h":788}]}]},{"sub":"La chambre et sa salle d'eau","rows":[{"t":"","p":[{"id":"0257","d":"Janvier 2023","s":"apres","w":1400,"h":630},{"id":"0258","d":"Janvier 2023","s":"apres","w":1400,"h":630},{"id":"0259","d":"Janvier 2023","s":"apres","w":697,"h":955}]},{"t":"","p":[{"id":"0261","d":"Janvier 2023","s":"apres","w":896,"h":1400},{"id":"0254","d":"Juillet 2023","s":"apres","w":1400,"h":788},{"id":"0256","d":"Juillet 2023","s":"apres","w":1400,"h":788}]}],"flat":1}],"all":[{"id":"0004","d":"Décembre 2019","s":"avant","w":1400,"h":1050},{"id":"0146","d":"11 octobre 2021","s":"incendie","w":1400,"h":1050},{"id":"0076","d":"26 juillet 2022","s":"travaux","w":787,"h":1400},{"id":"0077","d":"26 juillet 2022","s":"travaux","w":1400,"h":788},{"id":"0257","d":"Janvier 2023","s":"apres","w":1400,"h":630},{"id":"0258","d":"Janvier 2023","s":"apres","w":1400,"h":630},{"id":"0259","d":"Janvier 2023","s":"apres","w":697,"h":955},{"id":"0260","d":"Janvier 2023","s":"apres","w":1400,"h":650},{"id":"0261","d":"Janvier 2023","s":"apres","w":896,"h":1400},{"id":"0253","d":"Juillet 2023","s":"apres","w":1307,"h":771},{"id":"0254","d":"Juillet 2023","s":"apres","w":1400,"h":788},{"id":"0255","d":"Juillet 2023","s":"apres","w":1400,"h":788},{"id":"0256","d":"Juillet 2023","s":"apres","w":1400,"h":788}]},{"key":"western","title":"La Western","group":"Étage","sub":"Avant : un dortoir puis la salle de vidéoprojection","years":"2017 – 2023","boards":[{"sub":"Vers la fenêtre","rows":[{"t":"","p":[{"id":"0022","d":"16 avril 2017","s":"avant","w":1400,"h":1050},{"id":"0006","d":"Décembre 2019","s":"avant","w":1400,"h":1050},{"id":"0043","d":"Novembre 2020","s":"incendie","w":480,"h":360}]},{"t":"","p":[{"id":"0052","d":"24 mars 2022","s":"travaux","w":1400,"h":788},{"id":"0063","d":"30 mars 2022","s":"travaux","w":1400,"h":1050},{"id":"0231","d":"21 janvier 2023","s":"apres","w":1400,"h":631}]}]},{"sub":"La salle d'eau","rows":[{"t":"","p":[{"id":"0079","d":"26 juillet 2022","s":"travaux","w":787,"h":1400},{"id":"0092","d":"15 novembre 2022","s":"travaux","w":631,"h":1400},{"id":"0232","d":"3 février 2023","s":"apres","w":1400,"h":631},{"id":"0233","d":"3 février 2023","s":"apres","w":631,"h":1400}]}],"flat":1},{"sub":"La chambre aujourd'hui","rows":[{"t":"","p":[{"id":"0230","d":"21 janvier 2023","s":"apres","w":1400,"h":631},{"id":"0234","d":"Juillet 2023","s":"apres","w":1191,"h":766},{"id":"0235","d":"Juillet 2023","s":"apres","w":1091,"h":713}]}],"flat":1}],"all":[{"id":"0022","d":"16 avril 2017","s":"avant","w":1400,"h":1050},{"id":"0006","d":"Décembre 2019","s":"avant","w":1400,"h":1050},{"id":"0043","d":"Novembre 2020","s":"incendie","w":480,"h":360},{"id":"0044","d":"Novembre 2020","s":"incendie","w":360,"h":480},{"id":"0052","d":"24 mars 2022","s":"travaux","w":1400,"h":788},{"id":"0063","d":"30 mars 2022","s":"travaux","w":1400,"h":1050},{"id":"0079","d":"26 juillet 2022","s":"travaux","w":787,"h":1400},{"id":"0092","d":"15 novembre 2022","s":"travaux","w":631,"h":1400},{"id":"0230","d":"21 janvier 2023","s":"apres","w":1400,"h":631},{"id":"0231","d":"21 janvier 2023","s":"apres","w":1400,"h":631},{"id":"0232","d":"3 février 2023","s":"apres","w":1400,"h":631},{"id":"0233","d":"3 février 2023","s":"apres","w":631,"h":1400},{"id":"0234","d":"Juillet 2023","s":"apres","w":1191,"h":766},{"id":"0235","d":"Juillet 2023","s":"apres","w":1091,"h":713}]},{"key":"viking","title":"La Viking","group":"Étage","sub":"Avant : une chambre d'hôtes et l'ancien WC","years":"2020 – 2023","boards":[{"sub":"Depuis la porte d'entrée : la chambre et le trou de l'escalier","rows":[{"t":"","p":[{"id":"0139","d":"12 octobre 2020","s":"avant","w":1400,"h":1050},{"id":"0147","d":"11 octobre 2021","s":"incendie","w":1400,"h":1050},{"id":"0513","d":"12 octobre 2021","s":"incendie","w":1050,"h":1400},{"id":"0155","d":"10 décembre 2021","s":"travaux","_k":"2021-12-10 17:05:34","w":1400,"h":1050,"pk":"p_escalier_t.json"},{"id":"0058","d":"24 mars 2022","s":"travaux","w":1400,"h":788}]},{"t":"","p":[{"id":"0514","d":"12 août 2022","s":"travaux","w":787,"h":1400},{"id":"0098","d":"30 novembre 2022","s":"travaux","_k":"2022-11-30 15:52:59","w":1400,"h":631,"pk":"p_escalier_t.json"},{"id":"0208","d":"21 janvier 2023","s":"apres","_k":"2023-01-21 16:43:42","w":631,"h":1400,"pk":"p_escalier_p.json"},{"id":"0252","d":"Début 2023","s":"apres","w":1400,"h":631}]}]},{"sub":"Autres vues : l'incendie, la chambre et sa salle d'eau","rows":[{"t":"","p":[{"id":"0151","d":"11 octobre 2021","s":"incendie","w":1050,"h":1400},{"id":"0249","d":"26 janvier 2023","s":"apres","w":1400,"h":631},{"id":"0250","d":"26 janvier 2023","s":"apres","w":1400,"h":631},{"id":"0251","d":"Juillet 2023","s":"apres","w":1400,"h":788}]}],"flat":1}],"all":[{"id":"0139","d":"12 octobre 2020","s":"avant","w":1400,"h":1050},{"id":"0147","d":"11 octobre 2021","s":"incendie","w":1400,"h":1050},{"id":"0151","d":"11 octobre 2021","s":"incendie","w":1050,"h":1400},{"id":"0513","d":"12 octobre 2021","s":"incendie","w":1050,"h":1400},{"id":"0058","d":"24 mars 2022","s":"travaux","w":1400,"h":788},{"id":"0514","d":"12 août 2022","s":"travaux","w":787,"h":1400},{"id":"0249","d":"26 janvier 2023","s":"apres","w":1400,"h":631},{"id":"0250","d":"26 janvier 2023","s":"apres","w":1400,"h":631},{"id":"0252","d":"Début 2023","s":"apres","w":1400,"h":631},{"id":"0251","d":"Juillet 2023","s":"apres","w":1400,"h":788}]},{"key":"mongole","title":"La Mongole","group":"Étage","sub":"Avant : le dortoir en deux parties","years":"2017 – 2023","boards":[{"sub":"Vers la fenêtre","rows":[{"t":"","p":[{"id":"0017","d":"16 avril 2017","s":"avant","w":1400,"h":1050},{"id":"0161","d":"10 décembre 2021","s":"travaux","w":1400,"h":1050},{"id":"0056","d":"24 mars 2022","s":"travaux","w":1400,"h":788},{"id":"0263","d":"20 février 2023","s":"apres","w":1400,"h":631}]}]},{"sub":"Les deux parties de la chambre","rows":[{"t":"","p":[{"id":"0016","d":"16 avril 2017","s":"avant","w":1400,"h":1050},{"id":"0265","d":"20 février 2023","s":"apres","w":1400,"h":631}]}]},{"sub":"Autres vues de la chambre","rows":[{"t":"","p":[{"id":"0041","d":"Octobre 2020","s":"avant","w":1400,"h":1050},{"id":"0089","d":"1er novembre 2022","s":"travaux","w":1400,"h":631},{"id":"0262","d":"20 février 2023","s":"apres","w":1400,"h":631},{"id":"0269","d":"20 février 2023","s":"apres","w":1400,"h":631}]},{"t":"","p":[{"id":"0270","d":"20 février 2023","s":"apres","w":1400,"h":631},{"id":"0271","d":"Juillet 2023","s":"apres","w":1400,"h":788},{"id":"0272","d":"Juillet 2023","s":"apres","w":1400,"h":788},{"id":"0273","d":"Juillet 2023","s":"apres","w":1400,"h":788}]}],"flat":1}],"all":[{"id":"0016","d":"16 avril 2017","s":"avant","w":1400,"h":1050},{"id":"0017","d":"16 avril 2017","s":"avant","w":1400,"h":1050},{"id":"0041","d":"Octobre 2020","s":"avant","w":1400,"h":1050},{"id":"0161","d":"10 décembre 2021","s":"travaux","w":1400,"h":1050},{"id":"0056","d":"24 mars 2022","s":"travaux","w":1400,"h":788},{"id":"0089","d":"1er novembre 2022","s":"travaux","w":1400,"h":631},{"id":"0262","d":"20 février 2023","s":"apres","w":1400,"h":631},{"id":"0263","d":"20 février 2023","s":"apres","w":1400,"h":631},{"id":"0265","d":"20 février 2023","s":"apres","w":1400,"h":631},{"id":"0269","d":"20 février 2023","s":"apres","w":1400,"h":631},{"id":"0270","d":"20 février 2023","s":"apres","w":1400,"h":631},{"id":"0271","d":"Juillet 2023","s":"apres","w":1400,"h":788},{"id":"0272","d":"Juillet 2023","s":"apres","w":1400,"h":788},{"id":"0273","d":"Juillet 2023","s":"apres","w":1400,"h":788}]},{"key":"andalouse","title":"L'Andalouse","group":"Étage","sub":"Avant : le dortoir rouge","years":"2017 – 2023","boards":[{"sub":"Vers la fenêtre","rows":[{"t":"","p":[{"id":"0015","d":"16 avril 2017","s":"avant","w":1400,"h":1050},{"id":"0679","d":"10 décembre 2021","s":"travaux","w":1400,"h":1172},{"id":"0242","d":"20 février 2023","s":"apres","w":1400,"h":631}]}]},{"sub":"Autres vues de la chambre","rows":[{"t":"","p":[{"id":"0244","d":"20 février 2023","s":"apres","w":1400,"h":631},{"id":"0246","d":"Juillet 2023","s":"apres","w":1400,"h":788},{"id":"0247","d":"Juillet 2023","s":"apres","w":1400,"h":788}]}],"flat":1}],"all":[{"id":"0015","d":"16 avril 2017","s":"avant","w":1400,"h":1050},{"id":"0679","d":"10 décembre 2021","s":"travaux","w":1400,"h":1172},{"id":"0242","d":"20 février 2023","s":"apres","w":1400,"h":631},{"id":"0244","d":"20 février 2023","s":"apres","w":1400,"h":631},{"id":"0246","d":"Juillet 2023","s":"apres","w":1400,"h":788},{"id":"0247","d":"Juillet 2023","s":"apres","w":1400,"h":788}]},{"key":"amerindienne","title":"L'Amérindienne","group":"Étage","sub":"Avant : le dortoir bleu","years":"2017 – 2023","boards":[{"sub":"Vers la fenêtre","rows":[{"t":"","p":[{"id":"0018","d":"16 avril 2017","s":"avant","w":1400,"h":1050},{"id":"0160","d":"10 décembre 2021","s":"travaux","w":1400,"h":1050},{"id":"0236","d":"20 février 2023","s":"apres","w":1400,"h":631}]}]},{"sub":"Vers la porte","rows":[{"t":"","p":[{"id":"0011","d":"Décembre 2019","s":"avant","w":1400,"h":1050},{"id":"0239","d":"20 février 2023","s":"apres","w":1400,"h":631}]}]},{"sub":"Autres vues de la chambre","rows":[{"t":"","p":[{"id":"0237","d":"20 février 2023","s":"apres","w":1400,"h":631},{"id":"0240","d":"Juillet 2023","s":"apres","w":1400,"h":788},{"id":"0241","d":"Juillet 2023","s":"apres","w":1400,"h":788}]}],"flat":1}],"all":[{"id":"0018","d":"16 avril 2017","s":"avant","w":1400,"h":1050},{"id":"0011","d":"Décembre 2019","s":"avant","w":1400,"h":1050},{"id":"0160","d":"10 décembre 2021","s":"travaux","w":1400,"h":1050},{"id":"0236","d":"20 février 2023","s":"apres","w":1400,"h":631},{"id":"0237","d":"20 février 2023","s":"apres","w":1400,"h":631},{"id":"0239","d":"20 février 2023","s":"apres","w":1400,"h":631},{"id":"0240","d":"Juillet 2023","s":"apres","w":1400,"h":788},{"id":"0241","d":"Juillet 2023","s":"apres","w":1400,"h":788}]},{"key":"appartement-terrasse","title":"Appartement terrasse","group":"Appartements","sub":"Avant : deux chambres d'hôtes et leur salle de bain","years":"2017 – 2023","boards":[{"sub":"La fenêtre devenue porte-fenêtre de la terrasse","rows":[{"t":"","p":[{"id":"0140","d":"12 octobre 2020","s":"avant","w":1400,"h":1050},{"id":"0066","d":"30 mars 2022","s":"travaux","w":1400,"h":1050},{"id":"0084","d":"26 juillet 2022","s":"travaux","w":1400,"h":788},{"id":"0124","d":"Juillet 2023","s":"apres","w":1400,"h":788},{"id":"0126","d":"Juillet 2023","s":"apres","w":1400,"h":788}]}]},{"sub":"La chambre au rideau noir, devenue deux chambres","rows":[{"t":"","p":[{"id":"0014","d":"16 avril 2017","s":"avant","w":1400,"h":1050},{"id":"0057","d":"24 mars 2022","s":"travaux","w":1400,"h":788},{"id":"0083","d":"26 juillet 2022","s":"travaux","w":787,"h":1400},{"id":"0120","d":"Juillet 2023","s":"apres","w":1400,"h":788},{"id":"0123","d":"Juillet 2023","s":"apres","w":1400,"h":788}]}]},{"sub":"La salle de bain","rows":[{"t":"","p":[{"id":"0013","d":"17 avril 2017","s":"avant","w":1400,"h":1050},{"id":"0162","d":"10 décembre 2021","s":"incendie","w":1400,"h":1050},{"id":"0085","d":"26 juillet 2022","s":"travaux","w":787,"h":1400},{"id":"0125","d":"Juillet 2023","s":"apres","w":1400,"h":788}]}]},{"sub":"Le mur de la cuisine","rows":[{"t":"","p":[{"id":"0082","d":"26 juillet 2022","s":"travaux","w":1400,"h":788},{"id":"0128","d":"Juillet 2023","s":"apres","w":1400,"h":788}]}]}],"all":[{"id":"0014","d":"16 avril 2017","s":"avant","w":1400,"h":1050},{"id":"0013","d":"17 avril 2017","s":"avant","w":1400,"h":1050},{"id":"0113","d":"12 octobre 2020","s":"avant","w":1400,"h":1050},{"id":"0140","d":"12 octobre 2020","s":"avant","w":1400,"h":1050},{"id":"0046","d":"Novembre 2020","s":"incendie","w":480,"h":360},{"id":"0148","d":"11 octobre 2021","s":"incendie","w":1400,"h":1050},{"id":"0162","d":"10 décembre 2021","s":"incendie","w":1400,"h":1050},{"id":"0057","d":"24 mars 2022","s":"travaux","w":1400,"h":788},{"id":"0066","d":"30 mars 2022","s":"travaux","w":1400,"h":1050},{"id":"0068","d":"18 mai 2022","s":"travaux","w":1400,"h":1050},{"id":"0082","d":"26 juillet 2022","s":"travaux","w":1400,"h":788},{"id":"0083","d":"26 juillet 2022","s":"travaux","w":787,"h":1400},{"id":"0084","d":"26 juillet 2022","s":"travaux","w":1400,"h":788},{"id":"0085","d":"26 juillet 2022","s":"travaux","w":787,"h":1400},{"id":"0116","d":"Juillet 2023","s":"apres","w":1400,"h":788},{"id":"0119","d":"Juillet 2023","s":"apres","w":1400,"h":788},{"id":"0120","d":"Juillet 2023","s":"apres","w":1400,"h":788},{"id":"0121","d":"Juillet 2023","s":"apres","w":1400,"h":788},{"id":"0122","d":"Juillet 2023","s":"apres","w":1400,"h":788},{"id":"0123","d":"Juillet 2023","s":"apres","w":1400,"h":788},{"id":"0124","d":"Juillet 2023","s":"apres","w":1400,"h":788},{"id":"0125","d":"Juillet 2023","s":"apres","w":1400,"h":788},{"id":"0126","d":"Juillet 2023","s":"apres","w":1400,"h":788},{"id":"0127","d":"Juillet 2023","s":"apres","w":1400,"h":788},{"id":"0128","d":"Juillet 2023","s":"apres","w":1400,"h":788},{"id":"0206","d":"Juillet 2023","s":"apres","w":1400,"h":788},{"id":"0200","d":"8 juillet 2023","s":"apres","w":1400,"h":686},{"id":"0105","d":"27 juillet 2023","s":"apres","w":1400,"h":788}]},{"key":"combles","title":"Appartement des combles","group":"Appartements","sub":"","years":"2017 – 2024","boards":[{"sub":"De la cuisine vers le séjour","rows":[{"t":"","p":[{"id":"0032","d":"16 avril 2017","s":"avant","w":1400,"h":1050},{"id":"0048","d":"Novembre 2020","s":"incendie","w":480,"h":360},{"id":"0071","d":"23 mai 2022","s":"travaux","w":1400,"h":1050},{"id":"0487","d":"28 février 2024","s":"apres","w":1400,"h":788}]}]},{"sub":"Du séjour vers la cuisine","rows":[{"t":"","p":[{"id":"0033","d":"16 avril 2017","s":"avant","w":1400,"h":1050},{"id":"0045","d":"Novembre 2020","s":"incendie","w":480,"h":360},{"id":"0047","d":"Novembre 2020","s":"incendie","w":480,"h":360},{"id":"0485","d":"28 février 2024","s":"apres","w":1400,"h":788}]}]},{"sub":"Le séjour, côté fenêtres","rows":[{"t":"","p":[{"id":"0034","d":"16 avril 2017","s":"avant","w":1400,"h":1050},{"id":"0061","d":"24 mars 2022","s":"travaux","w":1400,"h":788},{"id":"0483","d":"28 février 2024","s":"apres","w":1400,"h":788}]}]},{"sub":"Le coin du poêle","rows":[{"t":"","p":[{"id":"0130","d":"21 février 2020","s":"avant","w":1400,"h":790},{"id":"0492","d":"28 février 2024","s":"apres","w":787,"h":1400}]}]},{"sub":"La salle de bain","rows":[{"t":"","p":[{"id":"0136","d":"10 mai 2020","s":"avant","w":1400,"h":635},{"id":"0501","d":"28 février 2024","s":"apres","w":1400,"h":788}]}]}],"all":[{"id":"0032","d":"16 avril 2017","s":"avant","w":1400,"h":1050},{"id":"0033","d":"16 avril 2017","s":"avant","w":1400,"h":1050},{"id":"0034","d":"16 avril 2017","s":"avant","w":1400,"h":1050},{"id":"0035","d":"16 avril 2017","s":"avant","w":1400,"h":1050},{"id":"0130","d":"21 février 2020","s":"avant","w":1400,"h":790},{"id":"0131","d":"21 février 2020","s":"avant","w":1400,"h":790},{"id":"0132","d":"22 février 2020","s":"avant","w":1400,"h":790},{"id":"0133","d":"23 février 2020","s":"avant","w":1400,"h":789},{"id":"0134","d":"3 mai 2020","s":"avant","w":1400,"h":1050},{"id":"0135","d":"3 mai 2020","s":"avant","w":1400,"h":1050},{"id":"0137","d":"3 mai 2020","s":"avant","w":1400,"h":1050},{"id":"0012","d":"10 mai 2020","s":"avant","w":1400,"h":1021},{"id":"0136","d":"10 mai 2020","s":"avant","w":1400,"h":635},{"id":"0045","d":"Novembre 2020","s":"incendie","w":480,"h":360},{"id":"0047","d":"Novembre 2020","s":"incendie","w":480,"h":360},{"id":"0048","d":"Novembre 2020","s":"incendie","w":480,"h":360},{"id":"0051","d":"Novembre 2020","s":"incendie","w":360,"h":480},{"id":"0061","d":"24 mars 2022","s":"travaux","w":1400,"h":788},{"id":"0069","d":"18 mai 2022","s":"travaux","w":1400,"h":1050},{"id":"0070","d":"18 mai 2022","s":"travaux","w":1400,"h":1050},{"id":"0071","d":"23 mai 2022","s":"travaux","w":1400,"h":1050},{"id":"0072","d":"24 mai 2022","s":"travaux","w":1400,"h":788},{"id":"0483","d":"28 février 2024","s":"apres","w":1400,"h":788},{"id":"0484","d":"28 février 2024","s":"apres","w":1400,"h":788},{"id":"0485","d":"28 février 2024","s":"apres","w":1400,"h":788},{"id":"0487","d":"28 février 2024","s":"apres","w":1400,"h":788},{"id":"0490","d":"28 février 2024","s":"apres","w":787,"h":1400},{"id":"0491","d":"28 février 2024","s":"apres","w":787,"h":1400},{"id":"0492","d":"28 février 2024","s":"apres","w":787,"h":1400},{"id":"0493","d":"28 février 2024","s":"apres","w":1400,"h":788},{"id":"0494","d":"28 février 2024","s":"apres","w":1400,"h":788},{"id":"0495","d":"28 février 2024","s":"apres","w":787,"h":1400},{"id":"0496","d":"28 février 2024","s":"apres","w":787,"h":1400},{"id":"0497","d":"28 février 2024","s":"apres","w":1400,"h":788},{"id":"0498","d":"28 février 2024","s":"apres","w":787,"h":1400},{"id":"0499","d":"28 février 2024","s":"apres","w":1400,"h":788},{"id":"0500","d":"28 février 2024","s":"apres","w":1400,"h":788},{"id":"0501","d":"28 février 2024","s":"apres","w":1400,"h":788}]},{"key":"troisieme-etage","title":"3e étage, aujourd'hui grenier","group":"Appartements","sub":"Étage condamné après l'incendie","years":"2020 – 2021","boards":[{"sub":"La chambre lambrissée","rows":[{"t":"","p":[{"id":"0141","d":"16 octobre 2020","s":"avant","w":1400,"h":1050},{"id":"0149","d":"11 octobre 2021","s":"incendie","w":1050,"h":1400}]}]}],"all":[{"id":"0141","d":"16 octobre 2020","s":"avant","w":1400,"h":1050},{"id":"0049","d":"Novembre 2020","s":"incendie","w":480,"h":360},{"id":"0149","d":"11 octobre 2021","s":"incendie","w":1050,"h":1400},{"id":"0150","d":"11 octobre 2021","s":"incendie","w":1050,"h":1400}]}],"chapters":[{"key":"avant","title":"Avant","years":"2017 – 2020"},{"key":"incendie","title":"L'incendie","years":"Novembre 2020 – 2021"},{"key":"travaux","title":"Les travaux","years":"Décembre 2021 – 2022"},{"key":"apres","title":"Après","years":"2023 – 2026"}],"extra":[{"id":"0142","d":"2 novembre 2020","s":"incendie","w":1400,"h":1050,"pk":"p_divers.json","title":"Le jour de l'incendie","pos":"first"}],"plans":[{"anchor":"rdc","title":"Rez-de-chaussée","sub":"Avant et après, côte à côte","rows":[{"p":[{"id":"PR1","s":"avant","d":"2019","w":1326,"h":965},{"id":"PR2","s":"apres","d":"2023","w":1326,"h":965}]}]},{"anchor":"rdc","title":"Rez-de-chaussée","sub":"Superposés : glissez le trait","cmp":[{"id":"PR1","s":"avant","d":"2019","w":1326,"h":965},{"id":"PR2","s":"apres","d":"2023","w":1326,"h":965}]},{"anchor":"etage","title":"1er étage","sub":"Avant et après, côte à côte","rows":[{"p":[{"id":"PE1","s":"avant","d":"2019","w":1219,"h":975},{"id":"PE2","s":"apres","d":"2023","w":1219,"h":975}]}]},{"anchor":"etage","title":"1er étage","sub":"Superposés : glissez le trait","cmp":[{"id":"PE1","s":"avant","d":"2019","w":1219,"h":975},{"id":"PE2","s":"apres","d":"2023","w":1219,"h":975}]},{"anchor":"combles","title":"2e étage","sub":"Avant et après, côte à côte","rows":[{"p":[{"id":"PC1","s":"avant","d":"2019","w":1400,"h":928},{"id":"PC2","s":"apres","d":"2024","w":1400,"h":928}]}]},{"anchor":"combles","title":"2e étage","sub":"Superposés : glissez le trait","cmp":[{"id":"PC1","s":"avant","d":"2019","w":1400,"h":928},{"id":"PC2","s":"apres","d":"2024","w":1400,"h":928}]},{"anchor":"origine","title":"Les plans d'origine","sub":"Avant l'incendie","rows":[{"p":[{"id":"0008","s":"avant","d":"2019","w":1326,"h":1216},{"id":"0009","s":"avant","d":"2019","w":1219,"h":961},{"id":"0010","s":"avant","d":"2019","w":1400,"h":911}]}]}],"moments":[{"c":"2017"},{"id":"0014","d":"16 avril 2017","pk":"p_appartement-terrasse_a.json"},{"id":"0015","d":"16 avril 2017","pk":"p_andalouse_a.json"},{"id":"0019","d":"16 avril 2017","pk":"p_couloir_a.json"},{"id":"0021","d":"16 avril 2017","pk":"p_sanitaires_a.json"},{"id":"0024","d":"16 avril 2017","pk":"p_escalier_a.json"},{"id":"0029","d":"17 avril 2017","pk":"p_refectoire_a.json"},{"c":"2020"},{"id":"0134","d":"3 mai 2020","pk":"p_combles_a.json"},{"id":"0198","d":"12 octobre 2020","pk":"p_billard_a.json"},{"id":"0196","d":"12 octobre 2020","pk":"p_hall_a.json"},{"id":"0139","d":"12 octobre 2020","pk":"p_viking_a.json"},{"id":"0140","d":"12 octobre 2020","pk":"p_appartement-terrasse_a.json"},{"c":"2 novembre 2020"},{"id":"0142","d":"2 novembre 2020","pk":"p_divers.json"},{"id":"0042","d":"Novembre 2020","pk":"p_escalier_i.json"},{"id":"0043","d":"Novembre 2020","pk":"p_western_i.json"},{"id":"0045","d":"Novembre 2020","pk":"p_combles_i.json"},{"id":"0046","d":"Novembre 2020","pk":"p_appartement-terrasse_i.json"},{"c":"2021"},{"id":"0143","d":"11 octobre 2021","pk":"p_refectoire_i.json"},{"id":"0144","d":"11 octobre 2021","pk":"p_hall_i.json"},{"id":"0147","d":"11 octobre 2021","pk":"p_viking_i.json"},{"id":"0148","d":"11 octobre 2021","pk":"p_appartement-terrasse_i.json"},{"id":"0150","d":"11 octobre 2021","pk":"p_troisieme-etage_i.json"},{"id":"0151","d":"11 octobre 2021","pk":"p_viking_i.json"},{"c":"Décembre 2021"},{"id":"0155","d":"10 décembre 2021","pk":"p_escalier_t.json"},{"id":"0159","d":"10 décembre 2021","pk":"p_couloir_i.json"},{"id":"0163","d":"10 décembre 2021","pk":"p_spa_t.json"},{"c":"2022"},{"id":"0037","d":"Février 2022","pk":"p_billard_t.json"},{"id":"0053","d":"24 mars 2022","pk":"p_couloir_t.json"},{"id":"0058","d":"24 mars 2022","pk":"p_viking_t.json"},{"id":"0066","d":"30 mars 2022","pk":"p_appartement-terrasse_t.json"},{"id":"0067","d":"13 avril 2022","pk":"p_spa_t.json"},{"id":"0068","d":"18 mai 2022","pk":"p_appartement-terrasse_t.json"},{"id":"0073","d":"26 juillet 2022","pk":"p_spa_t.json"},{"id":"0082","d":"26 juillet 2022","pk":"p_appartement-terrasse_t.json"},{"id":"0087","d":"30 octobre 2022","pk":"p_escalier_t.json"},{"id":"0095","d":"15 novembre 2022","pk":"p_lingerie_t.json"},{"id":"0097","d":"25 novembre 2022","pk":"p_escalier_t.json"},{"id":"0099","d":"8 décembre 2022","pk":"p_spa_t.json"},{"id":"0101","d":"10 décembre 2022","pk":"p_spa_t.json"},{"c":"2023"},{"id":"0103","d":"12 janvier 2023","pk":"p_escalier_p.json"},{"id":"0104","d":"12 janvier 2023","pk":"p_hall_p.json"},{"id":"0257","d":"Janvier 2023","pk":"p_orientale_p.json"},{"id":"0230","d":"21 janvier 2023","pk":"p_western_p.json"},{"id":"0209","d":"21 janvier 2023","pk":"p_couloir_p.json"},{"id":"0226","d":"3 février 2023","pk":"p_sanitaires_p.json"},{"id":"0236","d":"20 février 2023","pk":"p_amerindienne_p.json"},{"id":"0262","d":"20 février 2023","pk":"p_mongole_p.json"},{"id":"0242","d":"20 février 2023","pk":"p_andalouse_p.json"},{"id":"0214","d":"12 mai 2023","pk":"p_refectoire_p.json"},{"id":"0116","d":"Juillet 2023","pk":"p_appartement-terrasse_p.json"},{"id":"0126","d":"Juillet 2023","pk":"p_appartement-terrasse_p.json"},{"c":"2024"},{"id":"0483","d":"28 février 2024","pk":"p_combles_p.json"},{"id":"0503","d":"4 octobre 2024","pk":"p_billard_p.json"},{"c":"2025"},{"id":"0274","d":"Janvier 2025","pk":"p_spa_p.json"},{"id":"0309","d":"17 juillet 2025","pk":"p_hall_p.json"},{"id":"0314","d":"17 juillet 2025","pk":"p_billard_p.json"},{"c":"2026"},{"id":"0182","d":"10 avril 2026","pk":"p_sanitaires_p.json"},{"id":"0195","d":"10 avril 2026","pk":"p_sanitaires_p.json"},{"id":"0183","d":"10 avril 2026","pk":"p_sanitaires_p.json"},{"id":"0223","d":"5 juin 2026","pk":"p_billard_p.json"}],"momentsCount":59};
+const ST = {avant:'Avant', incendie:'Incendie', travaux:'Travaux', apres:'Après'};
+const SK = {avant:'a', incendie:'i', travaux:'t', apres:'p'};
+const byKey = {};
+function packOf(roomKey, stage){ return 'p_' + roomKey + '_' + SK[stage] + '.json'; }
+function packsOf(roomKey, photos){
+  const out = [];
+  photos.forEach(function(p){ const f = p.pk || packOf(roomKey, p.s); if(out.indexOf(f) < 0) out.push(f); });
+  return out;
+}
+
+/* 1. Mêmes angles de vue : une planche par pièce, une rangée par point de vue. */
+const ANGLES = {key:'angles', title:'Mêmes angles de vue', boards:true, slides:[]};
+/* 3. Toutes les photos, pièce par pièce, dans l'ordre du temps. */
+const PIECES = {key:'pieces', title:'Toutes les photos, pièce par pièce', boards:true, slides:[]};
+let nBoards = 0, nAll = 0, nRows = 0;
+DATA.rooms.forEach(function(r){
+  r.nAngles = 0;
+  r.boards.forEach(function(b){
+    const ph = [];
+    b.rows.forEach(function(row){ row.p.forEach(function(p){ ph.push(p); }); nRows++; });
+    r.nAngles += ph.length;
+    ANGLES.slides.push({anchor:r.key, title:b.name ? r.title + ' · ' + b.name : r.title, sub:b.sub || r.sub, rows:b.rows, packs:packsOf(r.key, ph), ph:ph, flat:!!b.flat, num:nBoards + 1,
+      nav:(nBoards + 1) + '. ' + r.title + (b.name ? ' · ' + b.name : b.sub ? ' · ' + b.sub : ''), navg:r.group});
+    nBoards++;
+  });
+  PIECES.slides.push({anchor:r.key, c:r.title, c2:r.all.length + ' photos · ' + r.years, nav:r.title, navg:r.group});
+  r.all.forEach(function(p){
+    PIECES.slides.push({anchor:r.key, title:r.title, rows:[{p:[p]}], packs:[packOf(r.key, p.s)]});
+    nAll++;
+  });
+  byKey[r.key] = r;
+});
+
+/* 2. Chronologie complète : toute la Demeure avant, puis l'incendie, puis les travaux, puis 2023 à 2026.
+   Dans chaque période, les pièces se suivent dans l'ordre de la visite. */
+const CHRONO = {key:'chronologie', title:'Chronologie complète', boards:true, slides:[]};
+DATA.chapters.forEach(function(ch){
+  ch.n = 0;
+  const part = [];
+  const navg = ch.title + ' · ' + ch.years;
+  DATA.rooms.forEach(function(r){
+    let first = true;
+    r.all.forEach(function(p){
+      if(p.s !== ch.key) return;
+      const s = {anchor:ch.key, title:r.title, sub:navg, rows:[{p:[p]}], packs:[packOf(r.key, p.s)]};
+      if(first){ s.nav = r.title; s.navg = navg; first = false; }
+      part.push(s); ch.n++;
+    });
+  });
+  /* les photos hors pièce : le jour de l'incendie ouvre sa période */
+  DATA.extra.forEach(function(p){
+    if(p.s !== ch.key) return;
+    const s = {anchor:ch.key, title:p.title, sub:navg, rows:[{p:[p]}], packs:[p.pk], nav:p.title, navg:navg};
+    if(p.pos === 'first') part.unshift(s); else part.push(s);
+    ch.n++;
+  });
+  CHRONO.slides.push({anchor:ch.key, c:ch.title, c2:ch.years + ' · ' + ch.n + ' photos', nav:'Début de la période', navg:navg});
+  part.forEach(function(s){ CHRONO.slides.push(s); });
+});
+
+const PLANS = {key:'plans', title:'Les plans', boards:true, slides:DATA.plans.map(function(p){
+  return {anchor:p.anchor, title:p.title, sub:p.sub, rows:p.rows, cmp:p.cmp, packs:['p_plans.json'], nav:p.title + ' · ' + p.sub};
+})};
+const MOMENTS = {key:'moments-cles', title:'Les moments clés', slides:DATA.moments.map(function(m){
+  return m.c ? {c:m.c, nav:m.c} : {id:m.id, d:m.d, packs:[m.pk]};
+}), punch:true};
+/* 4. Les extérieurs, lieu par lieu : un carton par lieu, les mêmes points de vue en calques, puis les photos dans l'ordre du temps. */
+const EXT = {key:'exterieurs', title:'Les extérieurs', boards:true, slides:[]};
+let nExt = 0, nExtAngles = 0;
+(DATA.ext || []).forEach(function(r){
+  EXT.slides.push({anchor:r.key, c:r.title, c2:r.n + ' photos · ' + r.years, nav:r.title, navg:'Les extérieurs'});
+  r.boards.forEach(function(b){
+    const pk = []; b.p.forEach(function(p){ if(pk.indexOf(p.pk) < 0) pk.push(p.pk); });
+    EXT.slides.push({anchor:r.key, title:r.title, sub:b.sub, rows:b.rows || [{t:'', p:b.p}], packs:pk, ph:b.p, flat:!!b.flat});
+    nExtAngles++;
+  });
+  r.all.forEach(function(p){ EXT.slides.push({anchor:r.key, title:r.title, sub:r.sub, rows:[{p:[p]}], packs:[p.pk]}); });
+  nExt += r.n;
+});
+/* 5. Rubrique à part : l'appartement de la longère, une planche en calques par pièce. */
+const LONG = {key:'longere', title:(DATA.longere ? DATA.longere.title : ''), boards:true, slides:[]};
+if(DATA.longere){
+  LONG.slides.push({c:DATA.longere.title, c2:DATA.longere.boards.length + ' pièces · avant, travaux, après', nav:DATA.longere.title});
+  DATA.longere.boards.forEach(function(b, n){
+    const pk = []; b.p.forEach(function(p){ if(pk.indexOf(p.pk) < 0) pk.push(p.pk); });
+    LONG.slides.push({anchor:'piece-' + (n + 1), title:DATA.longere.title, sub:b.sub, rows:b.rows || [{t:'', p:b.p}], packs:pk, ph:b.p, nav:b.sub, navg:DATA.longere.title});
+  });
+}
+const isLay = function(d){ return d === ANGLES || d === EXT || d === LONG; };
+[ANGLES, CHRONO, PIECES, PLANS, MOMENTS, EXT].concat(DATA.longere ? [LONG] : []).forEach(function(d){ byKey[d.key] = d; });
+
+const $ = function(id){ return document.getElementById(id); };
+const home = $('home'), player = $('player'), stage = $('stage'), msg = $('msg'), zoom = $('zoom');
+function el(tag, cls, text){ const e = document.createElement(tag); if(cls) e.className = cls; if(text !== undefined) e.textContent = text; return e; }
+
+/* ---------- où l'on en était : mémorisé par classement, pour reprendre au retour de l'accueil ---------- */
+let saved = {};
+try{ saved = JSON.parse(localStorage.getItem('demeure-pos') || '{}') || {}; }catch(e){ saved = {}; }
+function resumeAt(d, n){ const v = saved[d.key]; return v && v.n === n && v.i > 0 && v.i < n - 1 ? v.i : 0; }
+function resumeNotes(){
+  Object.keys(featMeta).forEach(function(k){
+    const v = saved[k], f = featMeta[k];
+    f.el.textContent = f.base + (v && v.i > 0 && v.i < v.n - 1 ? ' · reprise à la vue ' + (v.i + 1) : '');
+  });
+}
+
+/* ---------- accueil ---------- */
+const coverImgs = {}, featMeta = {};
+(function buildHome(){
+  const body = $('homeBody');
+  function feature(key, num, title, meta, target){
+    const f = el('button','feature'); f.type = 'button';
+    const fi = document.createElement('img'); fi.alt = ''; coverImgs[key] = fi; f.appendChild(fi);
+    const ft = el('span','txt');
+    if(num) ft.appendChild(el('span','n', num));
+    const fm = el('span','m', meta); ft.appendChild(fm); featMeta[key] = {el:fm, base:meta};
+    ft.appendChild(el('span','t', title));
+    f.appendChild(ft);
+    f.addEventListener('click', function(){ go(target); });
+    return f;
+  }
+  const top = el('div','features two');
+  top.appendChild(feature('plans', '', 'Les plans, avant et après', 'Côte à côte · superposés', 'plans'));
+  top.appendChild(feature('moments-cles', '', 'Les moments clés', DATA.momentsCount + ' photos · défilement rapide', 'moments-cles'));
+  body.appendChild(top);
+
+  const cats = el('div','features three');
+  cats.appendChild(feature('angles', '1', 'Mêmes angles de vue', DATA.rooms.length + ' pièces · ' + nRows + ' points de vue · avant, incendie, travaux, après', 'angles'));
+  const c2 = el('div','featbox');
+  c2.appendChild(feature('chronologie', '2', 'Chronologie complète', 'Toute la Demeure, période par période', 'chronologie'));
+  const chips = el('div','chips');
+  DATA.chapters.forEach(function(ch){
+    const b = el('button','chip s-' + ch.key); b.type = 'button';
+    b.appendChild(el('b','', ch.title)); b.appendChild(el('span','', ch.n + ' photos'));
+    b.addEventListener('click', function(){ go('chronologie/' + ch.key); });
+    chips.appendChild(b);
+  });
+  c2.appendChild(chips);
+  cats.appendChild(c2);
+  cats.appendChild(feature('pieces', '3', 'Toutes les photos, pièce par pièce', nAll + ' photos · dans l\'ordre du temps', 'pieces'));
+  body.appendChild(cats);
+
+  if(DATA.ext && DATA.ext.length){
+    const fx = el('div','features one');
+    fx.appendChild(feature('exterieurs', '4', 'Les extérieurs, lieu par lieu', DATA.ext.length + ' lieux · ' + nExt + ' photos · ' + nExtAngles + ' mêmes points de vue en calques', 'exterieurs'));
+    body.appendChild(fx);
+  }
+  if(DATA.longere){
+    const fl = el('div','features one');
+    fl.appendChild(feature('longere', '5', DATA.longere.title, 'L\'appartement de la longère · ' + DATA.longere.boards.length + ' pièces en calques · ' + DATA.longere.n + ' photos', 'longere'));
+    body.appendChild(fl);
+  }
+  const groups = [];
+  DATA.rooms.forEach(function(r){
+    let g = groups.find(function(x){ return x.name === r.group; });
+    if(!g){ g = {name:r.group, rooms:[]}; groups.push(g); }
+    g.rooms.push(r);
+  });
+  groups.forEach(function(g){
+    const s = el('section','group');
+    s.appendChild(el('h2','', g.name));
+    const grid = el('div','grid');
+    g.rooms.forEach(function(r){
+      const t = el('div','tile');
+      const cv = el('span','cv'); const im = document.createElement('img'); im.alt = ''; coverImgs[r.key] = im; cv.appendChild(im); t.appendChild(cv);
+      const tx = el('span','tx');
+      tx.appendChild(el('span','t', r.title));
+      if(r.sub) tx.appendChild(el('span','s', r.sub));
+      tx.appendChild(el('span','m', r.years));
+      const act = el('span','act');
+      const a = el('button','', 'Mêmes angles'); a.type = 'button'; a.appendChild(el('i','', String(r.nAngles)));
+      a.addEventListener('click', function(){ go('angles/' + r.key); });
+      const b = el('button','', 'Toutes les photos'); b.type = 'button'; b.appendChild(el('i','', String(r.all.length)));
+      b.addEventListener('click', function(){ go('pieces/' + r.key); });
+      act.appendChild(a); act.appendChild(b); tx.appendChild(act);
+      t.appendChild(tx);
+      grid.appendChild(t);
+    });
+    s.appendChild(grid);
+    body.appendChild(s);
+  });
+  if(DATA.ext && DATA.ext.length){
+    const s = el('section','group');
+    s.appendChild(el('h2','', 'Les extérieurs'));
+    const grid = el('div','grid');
+    DATA.ext.forEach(function(r){
+      const t = el('div','tile');
+      const cv = el('span','cv'); const im = document.createElement('img'); im.alt = ''; coverImgs['x-' + r.key] = im; cv.appendChild(im); t.appendChild(cv);
+      const tx = el('span','tx');
+      tx.appendChild(el('span','t', r.title));
+      if(r.sub) tx.appendChild(el('span','s', r.sub));
+      tx.appendChild(el('span','m', r.years));
+      const act = el('span','act');
+      const b = el('button','', 'Voir les photos'); b.type = 'button'; b.appendChild(el('i','', String(r.n)));
+      b.addEventListener('click', function(){ go('exterieurs/' + r.key); });
+      act.appendChild(b); tx.appendChild(act);
+      t.appendChild(tx);
+      grid.appendChild(t);
+    });
+    s.appendChild(grid);
+    body.appendChild(s);
+  }
+  resumeNotes();
+  fetch('covers.json').then(function(r){ return r.json(); }).then(function(list){
+    list.forEach(function(c){ if(coverImgs[c.k]) coverImgs[c.k].src = 'data:image/jpeg;base64,' + c.b; });
+  }).catch(function(){});
+})();
+
+/* ---------- lecteur ---------- */
+let show_ = null, cur = 0, slides = [], seq = [], timer = null, playing = false, urls = {}, rowsMode = false, layerMode = false;
+layerMode = true;          /* les calques sont l'affichage par défaut ; le bouton permet de revenir côte à côte */
+try{ layerMode = localStorage.getItem('demeure-calques') !== '0'; }catch(e){}
+/* Les photos arrivent par petits paquets (une pièce, une période). On ne garde en mémoire que les derniers. */
+const packs = {}, packOrder = [];
+function loadPack(file){
+  const i = packOrder.indexOf(file); if(i >= 0) packOrder.splice(i, 1);
+  packOrder.push(file);
+  if(!packs[file]){
+    packs[file] = fetch(file).then(function(r){ if(!r.ok) throw new Error(r.status); return r.json(); }).then(function(list){
+      const m = {}; list.forEach(function(x){ m[x.id] = x.b; }); return m;
+    });
+    packs[file].catch(function(){ delete packs[file]; });
+  }
+  while(packOrder.length > 12){ delete packs[packOrder.shift()]; }
+  return packs[file];
+}
+function loadPacks(files){
+  return Promise.all((files || []).map(loadPack)).then(function(maps){
+    return function(id){ for(let i = 0; i < maps.length; i++){ if(maps[i][id]) return maps[i][id]; } return null; };
+  });
+}
+function urlFor(get, id){
+  if(urls[id]) return urls[id];
+  const b = get(id); if(!b) return '';
+  const bin = atob(b); const n = bin.length; const u8 = new Uint8Array(n);
+  for(let i = 0; i < n; i++) u8[i] = bin.charCodeAt(i);
+  urls[id] = URL.createObjectURL(new Blob([u8], {type:'image/jpeg'}));
+  return urls[id];
+}
+function clearUrls(){ Object.keys(urls).forEach(function(k){ URL.revokeObjectURL(urls[k]); }); urls = {}; }
+/* Petit écran : une rangée par vue, sinon les photos seraient illisibles. */
+function smallScreen(){ return window.innerWidth < 700 || window.innerHeight < 520; }
+
+function caption(p, cls){
+  const cap = el(cls || 'figcaption', 'cap s-' + p.s);
+  const lab = p.l || ST[p.s] || '';
+  if(lab){ cap.appendChild(el('b','', lab)); cap.appendChild(el('i','','·')); }
+  cap.appendChild(el('span','d', p.d));
+  if(/^\d+$/.test(p.id) || /^P\d+$/.test(p.id)){ const n = el('span','num'); n.appendChild(el('i','','·')); n.appendChild(document.createTextNode(/^P/.test(p.id) ? p.id : 'n° ' + (+p.id))); cap.appendChild(n); }
+  return cap;
+}
+function buildSeq(d){
+  if(!d.boards) return d.slides.map(function(s){ return {s:s, packs:s.packs}; });
+  const out = [];
+  d.slides.forEach(function(s, bi){
+    if(s.rows && rowsMode && !(layerMode && isLay(d) && !s.flat) && (s.rows.length > 1 || s.rows[0].p.length > 3)){
+      /* petit écran : une vue par écran, trois photos au plus */
+      let ri = 0;
+      s.rows.forEach(function(row){
+        const n = row.p.length, parts = n <= 3 ? [n] : n === 4 ? [2, 2] : [3, n - 3];
+        let k = 0;
+        parts.forEach(function(len){
+          const r = {t:row.t, p:row.p.slice(k, k + len)}; k += len;
+          out.push({s:s, bi:bi, ri:ri++, rows:[r], packs:packsFor(s, [r])});
+        });
+      });
+    }
+    else out.push({s:s, bi:bi, ri:0, rows:s.rows || [], packs:s.packs});
+  });
+  return out;
+}
+function packsFor(s, rows){
+  if(s.packs.length < 2) return s.packs;
+  const r = byKey[s.anchor]; if(!r || !r.all) return s.packs;
+  const ph = []; rows.forEach(function(row){ row.p.forEach(function(p){ ph.push(p); }); });
+  return packsOf(r.key, ph);
+}
+function open(d, at){
+  stop(); unzoom(); clearUrls(); stage.textContent = ''; slides = []; cur = 0; show_ = d;
+  document.body.classList.toggle('punch', !!d.punch);
+  document.body.classList.toggle('boards', !!d.boards);
+  $('countlbl').textContent = d === ANGLES ? 'Planche' : 'Vue';
+  $('lay').classList.toggle('hidden', !isLay(d)); $('lay').setAttribute('aria-pressed', layerMode ? 'true' : 'false');
+  $('speed').value = d.punch ? '3' : '5';
+  rowsMode = !!d.boards && smallScreen();
+  seq = buildSeq(d);
+  buildJump();
+  seq.forEach(function(q){
+    const s = q.s;
+    const sl = el('section','slide');
+    if(s.c){
+      sl.classList.add('card'); sl.appendChild(el('span','', s.c));
+      if(s.c2) sl.appendChild(el('small','', s.c2));
+    }
+    else if(d.boards){
+      const pc = el('div','piece');
+      if(s.num) pc.appendChild(el('span','pn', 'Planche ' + s.num));
+      pc.appendChild(el('span','pt', s.title));
+      if(s.sub) pc.appendChild(el('span','ps', s.sub));
+      sl.appendChild(pc);
+      const m = el('div','media');
+      if(s.cmp) m.appendChild(compare(s));
+      const lay = layerMode && isLay(d) && s.ph && s.ph.length > 1 && !s.flat;
+      if(lay) m.appendChild(stack(s));
+      (lay ? [] : q.rows).forEach(function(r){
+        const br = el('div','brow');
+        if(r.t) br.appendChild(el('div','rl', r.t));
+        const row = el('div','row3');
+        r.p.forEach(function(p){
+          const fg = el('figure'); fg.dataset.ar = (p.w / p.h).toFixed(4);
+          const im = document.createElement('img'); im.alt = s.title + (r.t ? ', ' + r.t : '') + ', ' + (p.l || ST[p.s] || '') + ', ' + p.d; im.dataset.id = p.id; fg.appendChild(im);
+          fg._p = p; fg.appendChild(caption(p));
+          row.appendChild(fg);
+        });
+        br.appendChild(row); m.appendChild(br);
+      });
+      sl.appendChild(m);
+    }
+    else{
+      sl.appendChild(el('div','bg'));
+      const m = el('div','media'); const ph = el('div','ph');
+      const im = document.createElement('img'); im.alt = d.title + ', ' + s.d; im.dataset.id = s.id; ph.appendChild(im); m.appendChild(ph);
+      const cap = el('div','cap'); cap.textContent = s.d;
+      sl.appendChild(cap); sl.appendChild(m);
+    }
+    stage.appendChild(sl); slides.push(sl);
+  });
+  home.classList.add('hidden'); player.classList.remove('hidden');
+  layoutAll();
+  msg.textContent = 'Chargement des photos…'; msg.classList.remove('hidden');
+  const start = Math.max(0, Math.min(seq.length - 1, at || 0));
+  loadPacks(seq[start].packs).then(function(){
+    if(show_ !== d) return;
+    show(start);
+    if(d.punch) play();
+  }).catch(function(){
+    if(show_ !== d) return;
+    msg.textContent = 'Les photos n\'ont pas pu être chargées. Rechargez la page.';
+  });
+  cur = start; count();
+}
+function fill(k){
+  if(k < 0 || k >= slides.length || !seq[k].packs || !seq[k].packs.length) return;
+  const sl = slides[k], d = show_;
+  if(sl._filled) return;
+  loadPacks(seq[k].packs).then(function(get){
+    if(show_ !== d || slides[k] !== sl || sl._filled) return;
+    sl._filled = true;
+    sl.querySelectorAll('img[data-id]').forEach(function(im){
+      const u = urlFor(get, im.dataset.id); if(u) im.src = u;
+      const bg = sl.querySelector('.bg'); if(bg) bg.style.backgroundImage = 'url(' + u + ')';
+      const lb = im.previousElementSibling; if(lb && lb.className === 'lb') lb.style.backgroundImage = 'url(' + u + ')';
+    });
+    if(k === cur) msg.classList.add('hidden');
+  }).catch(function(){});
+}
+
+/* ---------- plans superposés : on glisse le trait pour passer d'avant à après ---------- */
+function compare(s){
+  const a = s.cmp[0], b = s.cmp[1];
+  const box = el('div','cmp'); box.dataset.ar = (a.w / a.h).toFixed(4);
+  const under = document.createElement('img'); under.dataset.id = b.id; under.alt = s.title + ', après'; under.className = 'cu';
+  const over = document.createElement('img'); over.dataset.id = a.id; over.alt = s.title + ', avant'; over.className = 'co';
+  const bar = el('div','cb');
+  const la = el('span','cl a s-avant'); la.appendChild(el('b','', 'Avant')); la.appendChild(document.createTextNode(' ' + a.d));
+  const lb = el('span','cl b s-apres'); lb.appendChild(el('b','', 'Après')); lb.appendChild(document.createTextNode(' ' + b.d));
+  const rg = document.createElement('input'); rg.type = 'range'; rg.min = '0'; rg.max = '100'; rg.value = '50';
+  rg.setAttribute('aria-label', 'Glisser pour passer du plan d\'avant au plan d\'après');
+  function set(v){
+    over.style.clipPath = 'inset(0 ' + (100 - v) + '% 0 0)'; bar.style.left = v + '%';
+    la.style.opacity = v < 12 ? '.25' : '1'; lb.style.opacity = v > 88 ? '.25' : '1';
+  }
+  rg.addEventListener('input', function(){ box._touched = true; set(+rg.value); });
+  box._set = function(v){ rg.value = String(v); set(v); };
+  [under, over, bar, la, lb, rg].forEach(function(n){ box.appendChild(n); });
+  set(50);
+  return box;
+}
+let sweepT = null;
+function sweep(sl){
+  cancelAnimationFrame(sweepT);
+  const box = sl.querySelector('.cmp'); if(!box || box._touched) return;
+  if(window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  const t0 = performance.now(), T = 5200;
+  (function step(now){
+    if(box._touched || !sl.classList.contains('on')) return;
+    const u = Math.min(1, (now - t0) / T);
+    /* part du plan d'avant entier, découvre le plan d'après, puis revient au milieu */
+    const v = u < .15 ? 100 : u < .6 ? 100 - (u - .15) / .45 * 100 : u < .72 ? 0 : (u - .72) / .28 * 50;
+    box._set(Math.round(v * 10) / 10);
+    if(u < 1) sweepT = requestAnimationFrame(step);
+  })(t0);
+}
+
+/* ---------- calques : les photos d'un même point de vue, l'une sur l'autre ----------
+   On tire le trait vers la gauche : la photo suivante se dévoile. Puis vers la droite : la suivante, etc.
+   Les flèches du clavier (ou une télécommande de présentation) font la même chose, pas à pas. */
+function stack(s){
+  const P = s.ph, n = P.length;
+  const wrap = el('div','stkw'), box = el('div','stk');
+  const ars = P.map(function(p){ return p.w / p.h; }).sort(function(a, b){ return a - b; });
+  box.dataset.ar = Math.max(1.2, Math.min(1.78, ars[Math.floor(n / 2)])).toFixed(4);
+  const L = P.map(function(p){
+    const ly = el('div','ly'); ly.dataset.ar = (p.w / p.h).toFixed(4); ly._p = p;
+    ly.appendChild(el('div','lb'));
+    const im = document.createElement('img'); im.alt = s.title + ', ' + (p.l || ST[p.s] || '') + ', ' + p.d; im.dataset.id = p.id; im.draggable = false;
+    if(p.fit){            /* photo prise de plus près : on la montre plus petite, à l'échelle des autres */
+      im.style.right = 'auto'; im.style.bottom = 'auto'; im.style.left = (p.fit[0] * 100) + '%'; im.style.top = (p.fit[1] * 100) + '%';
+      im.style.width = (p.fit[2] * 100) + '%'; im.style.height = 'auto';
+    }
+    ly.appendChild(im); box.appendChild(ly); return ly;
+  });
+  const bar = el('div','cb'); box.appendChild(bar);
+  const zb = el('button','zb','⤢'); zb.type = 'button'; zb.setAttribute('aria-label', 'Agrandir cette photo'); box.appendChild(zb);
+  const chips = el('div','lc');
+  const C = P.map(function(p, i){
+    const c = el('button','s-' + p.s); c.type = 'button';
+    c.appendChild(el('b','', p.l || ST[p.s] || '')); c.appendChild(document.createTextNode(' ' + p.d));
+    if(/^\d+$/.test(p.id)) c.appendChild(el('span','num', ' · n° ' + (+p.id))); else if(/^P\d+$/.test(p.id)) c.appendChild(el('span','num', ' · ' + p.id));
+    c.addEventListener('click', function(){ stop(); go(i); });
+    chips.appendChild(c); return c;
+  });
+  let k = 0, f = 0, anim = null, drag = false;     /* k : photo du dessous ; f : part dévoilée de la suivante */
+  function draw(){
+    const even = k % 2 === 0, v = even ? 100 * (1 - f) : 100 * f;
+    L.forEach(function(ly, i){ ly.classList.toggle('on', i === k || i === k + 1); ly.classList.toggle('top', i === k + 1); ly.style.clipPath = ''; });
+    if(L[k + 1]) L[k + 1].style.clipPath = even ? 'inset(0 0 0 ' + v + '%)' : 'inset(0 ' + (100 - v) + '% 0 0)';
+    bar.style.left = v + '%';
+    box._act = k + (f > .5 ? 1 : 0);
+    C.forEach(function(c, i){ c.classList.toggle('on', i === box._act); });
+  }
+  function commit(){ if(f >= .995 && k + 2 <= n - 1){ k++; f = 0; } }
+  function go(i){
+    cancelAnimationFrame(anim);
+    if(i >= n - 1){ k = Math.max(0, n - 2); f = 1; } else { k = Math.max(0, i); f = 0; }
+    draw();
+  }
+  function run(to, done){
+    cancelAnimationFrame(anim);
+    const from = f, t0 = performance.now(), T = 900;
+    if(window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches){ f = to; draw(); if(done) done(); return; }
+    (function fr(now){
+      const u = Math.min(1, (now - t0) / T), e = u < .5 ? 2 * u * u : 1 - Math.pow(-2 * u + 2, 2) / 2;
+      f = from + (to - from) * e; draw();
+      if(u < 1) anim = requestAnimationFrame(fr); else if(done) done();
+    })(t0);
+  }
+  box._step = function(dir){
+    if(dir > 0){
+      commit();
+      if(f >= .995) return false;                    /* la dernière photo est entièrement dévoilée */
+      run(1, commit); return true;
+    }
+    if(f > .005){ run(0); return true; }
+    if(k > 0){ k--; f = 1; run(0); return true; }
+    return false;
+  };
+  function at(e){
+    const r = box.getBoundingClientRect(), v = Math.max(0, Math.min(100, (e.clientX - r.left) / r.width * 100));
+    f = k % 2 === 0 ? 1 - v / 100 : v / 100; commit(); draw();
+  }
+  box.addEventListener('pointerdown', function(e){
+    if(e.target === zb) return;
+    stop(); cancelAnimationFrame(anim); drag = true;
+    try{ box.setPointerCapture(e.pointerId); }catch(err){}
+    at(e);
+  });
+  box.addEventListener('pointermove', function(e){ if(drag) at(e); });
+  box.addEventListener('pointerup', function(){ drag = false; });
+  box.addEventListener('pointercancel', function(){ drag = false; });
+  zb.addEventListener('click', function(e){ e.stopPropagation(); stop(); zList = L; zoom.classList.remove('hidden'); zshow(box._act || 0); });
+  box._go = go;
+  wrap.appendChild(box); wrap.appendChild(chips);
+  go(0);
+  return wrap;
+}
+function stepStack(dir){ const st = slides[cur] && slides[cur].querySelector('.stk'); return !!(st && st._step(dir)); }
+function advance(dir){ if(!stepStack(dir)) show(cur + dir); }
+
+/* Chaque rangée prend toute la largeur si la hauteur le permet ; sinon les rangées se partagent la hauteur. */
+function layout(sl){
+  const m = sl.querySelector('.media'); if(!m) return;
+  const W = m.clientWidth, H = m.clientHeight; if(!W || !H) return;
+  const cmp = m.querySelector('.cmp');
+  if(cmp){
+    const ar = +cmp.dataset.ar, w = Math.floor(Math.min(W, H * ar));
+    cmp.style.width = w + 'px'; cmp.style.height = Math.floor(w / ar) + 'px';
+    return;
+  }
+  const stk = m.querySelector('.stk');
+  if(stk){
+    const ar = +stk.dataset.ar, hh = H - (W < 640 ? 84 : 48), w = Math.floor(Math.min(W, hh * ar));
+    stk.style.width = w + 'px'; stk.style.height = Math.floor(w / ar) + 'px';
+    return;
+  }
+  const rows = Array.prototype.slice.call(m.querySelectorAll('.brow')); if(!rows.length) return;
+  const small = W < 640, L = small ? 28 : 34, gap = small ? 6 : 14, rgap = small ? 6 : 12;
+  const col = small && H > W && rows.length === 1 && rows[0].querySelectorAll('figure').length > 1;
+  const info = rows.map(function(br){
+    const figs = Array.prototype.slice.call(br.querySelectorAll('figure'));
+    const ar = figs.map(function(f){ return +f.dataset.ar; });
+    const over = L + (br.querySelector('.rl') ? 24 : 0);
+    return {br:br, figs:figs, ar:ar, over:over, hw:(W - gap * (figs.length - 1)) / ar.reduce(function(a, b){ return a + b; }, 0)};
+  });
+  if(col){
+    const it = info[0], n = it.figs.length;
+    it.br.querySelector('.row3').classList.add('col'); it.br.style.width = '';
+    it.figs.forEach(function(f, i){
+      const hh = Math.max(40, Math.floor(Math.min((H - (it.over - L) - gap * (n - 1)) / n - L, W / it.ar[i])));
+      const w = Math.floor(hh * it.ar[i]);
+      f.style.width = w + 'px'; f.querySelector('img').style.height = hh + 'px'; f.classList.remove('narrow');
+    });
+    return;
+  }
+  let free = H - rgap * (info.length - 1) - info.reduce(function(a, x){ return a + x.over; }, 0);
+  const todo = info.slice().sort(function(a, b){ return a.hw - b.hw; });
+  todo.forEach(function(it, i){
+    it.h = Math.max(40, Math.floor(Math.min(it.hw, free / (todo.length - i))));
+    free -= it.h;
+  });
+  info.forEach(function(it){
+    it.br.querySelector('.row3').classList.remove('col');
+    let tw = 0;
+    it.figs.forEach(function(f, i){
+      const w = Math.floor(it.h * it.ar[i]); tw += w;
+      f.style.width = w + 'px'; f.querySelector('img').style.height = it.h + 'px'; f.classList.toggle('narrow', w < (document.body.classList.contains('nums') ? 340 : 270));
+    });
+    it.br.style.width = (tw + gap * (it.figs.length - 1)) + 'px';
+  });
+}
+function layoutAll(){ slides.forEach(layout); }
+let rsT;
+window.addEventListener('resize', function(){
+  if(show_ && show_.boards && smallScreen() !== rowsMode){
+    clearTimeout(rsT);
+    rsT = setTimeout(function(){
+      if(!show_ || !show_.boards || smallScreen() === rowsMode) return;
+      const bi = seq[cur] ? seq[cur].bi : 0, d = show_, was = playing;
+      rowsMode = smallScreen();
+      const at = buildSeq(d).findIndex(function(q){ return q.bi === bi; });
+      open(d, at); if(was) play();
+    }, 150);
+  }
+  else layoutAll();
+});
+function buildJump(){
+  const sel = $('jump'); sel.textContent = '';
+  const o0 = el('option','', 'Aller à…'); o0.value = ''; sel.appendChild(o0);
+  let grp = null, gname = null, n = 0;
+  seq.forEach(function(q, i){
+    if(!q.s.nav || q.ri) return;
+    let parent = sel;
+    if(q.s.navg){
+      if(q.s.navg !== gname){ gname = q.s.navg; grp = document.createElement('optgroup'); grp.label = gname; sel.appendChild(grp); }
+      parent = grp;
+    }
+    const o = el('option','', q.s.nav); o.value = String(i); parent.appendChild(o); n++;
+  });
+  sel.classList.toggle('hidden', n < 2);
+}
+function count(){
+  const g = $('goto');
+  if(document.activeElement !== g) g.value = slides.length ? String(cur + 1) : '';
+  $('total').textContent = slides.length ? '/ ' + slides.length : '';
+  $('prog').style.width = slides.length ? ((cur + 1) / slides.length * 100) + '%' : '0';
+}
+function hashFor(k){ return show_.key + '/' + (k + 1); }
+function show(k){
+  if(!slides.length) return;
+  k = (k + slides.length) % slides.length;
+  slides[cur].classList.remove('on'); cur = k; slides[cur].classList.add('on');
+  const need = seq[cur].packs && seq[cur].packs.length;
+  msg.classList.toggle('hidden', !!slides[cur]._filled || !need);
+  fill(k); fill(k + 1); fill(k - 1);
+  count();
+  sweep(slides[cur]);
+  const st0 = slides[cur].querySelector('.stk'); if(st0) st0._go(0);
+  const h = hashFor(cur);
+  if(location.hash !== '#' + h){ try{ history.replaceState(null, '', '#' + h); }catch(e){ location.hash = h; } }
+  saved[show_.key] = {i:cur, n:slides.length};
+  try{ localStorage.setItem('demeure-pos', JSON.stringify(saved)); }catch(e){}
+  if(playing) schedule();
+}
+function dur(){
+  const base = +$('speed').value * 1000, sl = slides[cur];
+  if(sl && sl.classList.contains('card')) return Math.max(1600, base * .6);
+  if(show_ && show_.boards){
+    if(sl.querySelector('.stk')) return base;
+    if(sl.querySelector('.cmp')) return Math.max(7000, base * 2);
+    const n = sl.querySelectorAll('figure').length;
+    return n <= 1 ? base : n <= 3 ? base * 2 : base * 3;
+  }
+  return base;
+}
+function schedule(){ clearTimeout(timer); timer = setTimeout(function(){
+  if(stepStack(1)){ schedule(); return; }      /* calques : photo suivante du même point de vue */
+  if(cur === slides.length - 1){ stop(); return; } show(cur + 1); }, dur()); }
+function play(){ if(!slides.length) return; playing = true; const b = $('play'); b.classList.add('playing'); b.innerHTML = '❚❚ <span class="lbl">Pause</span>'; if(cur === slides.length - 1) show(0); else schedule(); }
+function stop(){ playing = false; clearTimeout(timer); document.body.classList.remove('idle'); const b = $('play'); b.classList.remove('playing'); b.innerHTML = '▶ <span class="lbl">Défilement auto</span>'; }
+function close(){ stop(); unzoom(); show_ = null; clearUrls(); stage.textContent = ''; slides = []; seq = []; document.body.classList.remove('punch'); document.body.classList.remove('boards'); player.classList.add('hidden'); home.classList.remove('hidden'); resumeNotes(); }
+
+/* ---------- agrandir une photo : plein écran, puis loupe ----------
+   Un clic sur la photo agrandie la grossit 2,5 fois à l'endroit visé ; la molette ou deux doigts règlent
+   le grossissement, on déplace en glissant. La version haute définition (hd/<numéro>.jpg) est chargée
+   à ce moment-là, pour que les détails restent nets. */
+let zList = [], zi = 0, zs = 1, zx = 0, zy = 0;
+const zimg = $('zimg'), zw = $('zw'), hd = {};
+function zfit(){
+  const ar = +zimg.dataset.ar || 1.5, W = zw.clientWidth, H = zw.clientHeight;
+  const w = Math.floor(Math.min(W, H * ar));
+  zimg.style.width = w + 'px'; zimg.style.height = Math.floor(w / ar) + 'px';
+}
+function zapply(){
+  const W = zw.clientWidth, H = zw.clientHeight, w = zimg.offsetWidth * zs, h = zimg.offsetHeight * zs;
+  const mx = Math.max(0, (w - W) / 2), my = Math.max(0, (h - H) / 2);
+  zx = Math.max(-mx, Math.min(mx, zx)); zy = Math.max(-my, Math.min(my, zy));
+  zimg.style.transform = 'translate(' + zx + 'px,' + zy + 'px) scale(' + zs + ')';
+  zoom.classList.toggle('zoomed', zs > 1.01);
+}
+function zto(s, cx, cy){            /* cx, cy : le point visé, mesuré depuis le centre */
+  s = Math.max(1, Math.min(6, s));
+  const k = s / zs;
+  zx = cx - (cx - zx) * k; zy = cy - (cy - zy) * k; zs = s;
+  if(zs <= 1.01){ zs = 1; zx = 0; zy = 0; }
+  zapply();
+}
+function zpoint(e){ const r = zw.getBoundingClientRect(); return [e.clientX - r.left - r.width / 2, e.clientY - r.top - r.height / 2]; }
+function zshow(i){
+  zi = (i + zList.length) % zList.length;
+  const f = zList[zi], im = f.querySelector('img'), id = im.dataset.id;
+  zs = 1; zx = 0; zy = 0; zimg.style.transition = ''; zimg.style.transform = ''; zoom.classList.remove('zoomed');
+  zimg.dataset.id = id; zimg.dataset.ar = f.dataset.ar; zimg.alt = im.alt; zimg.src = hd[id] || im.src;
+  zfit();
+  const c = $('zcap'); c.textContent = ''; const cp = caption(f._p, 'span'); c.className = cp.className;
+  while(cp.firstChild) c.appendChild(cp.firstChild);
+  if(!hd[id] && /^\d+$/.test(id)){
+    fetch('hd/' + id + '.jpg').then(function(r){ if(!r.ok) throw new Error(r.status); return r.blob(); }).then(function(b){
+      hd[id] = URL.createObjectURL(b);
+      const pre = new Image();
+      pre.onload = function(){ if(zList.length && zimg.dataset.id === id) zimg.src = hd[id]; };
+      pre.src = hd[id];
+    }).catch(function(){});
+  }
+}
+function unzoom(){ zoom.classList.add('hidden'); zoom.classList.remove('zoomed'); zList = []; zs = 1; zx = 0; zy = 0; }
+stage.addEventListener('click', function(e){
+  const im = e.target.closest && e.target.closest('.boards .slide.on figure img');
+  if(!im || !im.getAttribute('src')) return;
+  stop();
+  zList = Array.prototype.slice.call(slides[cur].querySelectorAll('figure'));
+  zoom.classList.remove('hidden'); zshow(zList.indexOf(im.parentNode));
+});
+const zp = new Map(); let zmoved = 0, zmulti = false, zstart = null, zpinch = null;
+function zdist(a, b){ return Math.hypot(a[0] - b[0], a[1] - b[1]); }
+zw.addEventListener('pointerdown', function(e){
+  try{ zw.setPointerCapture(e.pointerId); }catch(err){}
+  zimg.style.transition = '';
+  zp.set(e.pointerId, [e.clientX, e.clientY]);
+  if(zp.size === 1){ zmoved = 0; zmulti = false; zstart = [e.clientX, e.clientY, zx, zy]; }
+  else if(zp.size === 2){ zmulti = true; const a = Array.from(zp.values()); zpinch = {d:Math.max(1, zdist(a[0], a[1])), s:zs}; }
+});
+zw.addEventListener('pointermove', function(e){
+  if(!zp.has(e.pointerId)) return;
+  zp.set(e.pointerId, [e.clientX, e.clientY]);
+  if(zp.size === 2 && zpinch){
+    const a = Array.from(zp.values()), r = zw.getBoundingClientRect();
+    zto(zpinch.s * zdist(a[0], a[1]) / zpinch.d, (a[0][0] + a[1][0]) / 2 - r.left - r.width / 2, (a[0][1] + a[1][1]) / 2 - r.top - r.height / 2);
+  }
+  else if(zp.size === 1 && zstart){
+    const dx = e.clientX - zstart[0], dy = e.clientY - zstart[1];
+    zmoved = Math.max(zmoved, Math.abs(dx) + Math.abs(dy));
+    if(zs > 1.01){ zx = zstart[2] + dx; zy = zstart[3] + dy; zapply(); }
+  }
+});
+function zup(e){
+  if(!zp.has(e.pointerId)) return;
+  zp.delete(e.pointerId);
+  if(zp.size < 2) zpinch = null;
+  if(zp.size === 1){ const a = Array.from(zp.values())[0]; zstart = [a[0], a[1], zx, zy]; }
+  if(zp.size === 0 && !zmulti && zmoved < 8 && e.type === 'pointerup'){
+    if(document.elementFromPoint(e.clientX, e.clientY) === zimg){
+      const pt = zpoint(e);
+      zimg.style.transition = 'transform .2s ease';
+      if(zs > 1.01) zto(1, 0, 0); else zto(2.5, pt[0], pt[1]);
+    }
+    else unzoom();
+  }
+}
+zw.addEventListener('pointerup', zup);
+zw.addEventListener('pointercancel', zup);
+zoom.addEventListener('wheel', function(e){
+  e.preventDefault(); zimg.style.transition = '';
+  const pt = zpoint(e); zto(zs * Math.exp(-e.deltaY * 0.0016), pt[0], pt[1]);
+}, {passive:false});
+zoom.addEventListener('click', function(e){ if(e.target === zoom || e.target.id === 'zcap') unzoom(); });
+$('zplus').onclick = function(e){ e.stopPropagation(); zimg.style.transition = 'transform .2s ease'; zto(zs * 1.6, 0, 0); };
+$('zminus').onclick = function(e){ e.stopPropagation(); zimg.style.transition = 'transform .2s ease'; zto(zs / 1.6, 0, 0); };
+$('zclose').onclick = function(e){ e.stopPropagation(); unzoom(); };
+window.addEventListener('resize', function(){ if(zList.length){ zfit(); zapply(); } });
+
+/* ---------- navigation par l'adresse : #angles/hall, #chronologie/incendie, #pieces/spa, #plans… ---------- */
+function go(h){ if(location.hash === '#' + h) route(); else location.hash = h; }
+function route(){
+  let k = decodeURIComponent(location.hash.replace(/^#/, ''));
+  if(k === 'visite' || k === 'avant-incendie-apres') k = 'angles';
+  let parts = k.split('/');
+  if(byKey[parts[0]] && byKey[parts[0]].all) parts = ['angles', parts[0]];   /* anciens liens #hall, #spa… */
+  const d = byKey[parts[0]];
+  if(!d || !d.slides){ if(show_) close(); return; }
+  if(show_ !== d){
+    rowsMode = !!d.boards && smallScreen();
+    const sq = buildSeq(d);
+    const i = !parts[1] ? resumeAt(d, sq.length) : /^\d+$/.test(parts[1]) ? +parts[1] - 1 : sq.findIndex(function(q){ return q.s.anchor === parts[1]; });
+    open(d, Math.max(0, i));
+  }
+  else if(parts[1] && /^\d+$/.test(parts[1])){ if(+parts[1] - 1 !== cur) show(Math.max(0, Math.min(slides.length - 1, +parts[1] - 1))); }
+  else if(parts[1] && (!seq[cur] || seq[cur].s.anchor !== parts[1])){
+    const i = seq.findIndex(function(q){ return q.s.anchor === parts[1]; });
+    if(i >= 0) show(i);
+  }
+}
+window.addEventListener('hashchange', route);
+
+function setNums(on){
+  document.body.classList.toggle('nums', on); $('nums').setAttribute('aria-pressed', on ? 'true' : 'false');
+  try{ localStorage.setItem('demeure-nums', on ? '1' : '0'); }catch(e){}
+}
+try{ if(localStorage.getItem('demeure-nums') !== '0') setNums(true); }catch(e){ document.body.classList.add('nums'); }
+
+$('back').onclick = function(){ close(); try{ history.replaceState(null, '', location.pathname + location.search); }catch(e){ location.hash = ''; } };
+$('play').onclick = function(){ playing ? stop() : play(); };
+$('prev').onclick = function(){ advance(-1); };
+$('next').onclick = function(){ advance(1); };
+$('navL').onclick = function(){ advance(-1); };
+$('navR').onclick = function(){ advance(1); };
+$('lay').onclick = function(){
+  layerMode = !layerMode; try{ localStorage.setItem('demeure-calques', layerMode ? '1' : '0'); }catch(e){}
+  if(!show_) return;
+  const bi = seq[cur] ? seq[cur].bi : 0, d = show_, was = playing;
+  rowsMode = !!d.boards && smallScreen();
+  open(d, Math.max(0, buildSeq(d).findIndex(function(q){ return q.bi === bi; }))); if(was) play();
+};
+$('speed').onchange = function(){ if(playing) schedule(); };
+$('jump').onchange = function(){ const v = this.value; this.value = ''; this.blur(); if(v !== '') show(+v); };
+$('goto').addEventListener('focus', function(){ stop(); this.select(); });
+$('goto').addEventListener('change', function(){
+  const n = parseInt(this.value, 10); this.blur();
+  if(n >= 1 && slides.length) show(Math.min(slides.length, n) - 1); else count();
+});
+$('goto').addEventListener('keydown', function(e){ if(e.key === 'Enter'){ this.blur(); } else if(e.key === 'Escape'){ this.value = String(cur + 1); this.blur(); } e.stopPropagation(); });
+$('nums').onclick = function(){ setNums(!document.body.classList.contains('nums')); };
+$('fs').onclick = function(){ try{ if(document.fullscreenElement) document.exitFullscreen(); else document.documentElement.requestFullscreen().catch(function(){}); }catch(e){} };
+document.addEventListener('keydown', function(e){
+  if(!show_ || e.target.tagName === 'SELECT' || e.target.tagName === 'INPUT') return;
+  if(zList.length){
+    if(e.key === 'ArrowRight'){ zshow(zi + 1); e.preventDefault(); }
+    else if(e.key === 'ArrowLeft'){ zshow(zi - 1); e.preventDefault(); }
+    else if(e.key === '+' || e.key === '='){ zto(zs * 1.6, 0, 0); e.preventDefault(); }
+    else if(e.key === '-'){ zto(zs / 1.6, 0, 0); e.preventDefault(); }
+    else if(e.key === 'Escape' || e.key === ' ' || e.key === 'Enter'){ unzoom(); e.preventDefault(); }
+    return;
+  }
+  if(e.key === 'ArrowRight' || e.key === 'PageDown'){ advance(1); e.preventDefault(); }
+  else if(e.key === 'ArrowLeft' || e.key === 'PageUp'){ advance(-1); e.preventDefault(); }
+  else if(e.key === ' '){ playing ? stop() : play(); e.preventDefault(); }
+  else if(e.key === 'Home'){ show(0); } else if(e.key === 'End'){ show(slides.length - 1); }
+  else if(e.key === 'f' || e.key === 'F'){ $('fs').click(); }
+  else if(e.key === 'Escape' && !document.fullscreenElement){ $('back').click(); }
+});
+let tx = null;
+function swipe(node, fn){
+  node.addEventListener('touchstart', function(e){ tx = (e.target.closest && e.target.closest('.cmp,.stk')) ? null : e.touches[0].clientX; }, {passive:true});
+  node.addEventListener('touchend', function(e){ if(tx === null) return; const dx = e.changedTouches[0].clientX - tx; tx = null; if(Math.abs(dx) > 50) fn(dx < 0 ? 1 : -1, e); });
+}
+swipe(stage, function(dir){ show(cur + dir); });
+swipe(zoom, function(dir, e){ if(zs > 1.01 || zmulti) return; e.preventDefault(); zshow(zi + dir); });
+let idleT;
+function wake(){ document.body.classList.remove('idle'); clearTimeout(idleT); idleT = setTimeout(function(){ if(playing) document.body.classList.add('idle'); }, 2500); }
+['mousemove','keydown','touchstart'].forEach(function(ev){ document.addEventListener(ev, wake, {passive:true}); });
+route();
+</script>
+</body>
+</html>
